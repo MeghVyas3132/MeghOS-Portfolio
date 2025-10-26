@@ -125,8 +125,4 @@ Contact
 -------
 Megh Vyas — GitHub: [@MeghVyas3132](https://github.com/MeghVyas3132)
 
-Footer / small print
---------------------
-This README is crafted to be subtle, professional, and terminal-inspired to match the project's theme. Replace demo assets and personalize the project gallery to best reflect your work.
 
-Enjoy building — and keep systems reliable. 🚀
