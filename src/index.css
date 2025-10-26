@@ -1,0 +1,128 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Linux OS Dark Theme */
+    --background: 220 13% 6%;
+    --foreground: 0 0% 95%;
+
+    --card: 220 13% 8%;
+    --card-foreground: 0 0% 95%;
+
+    --popover: 220 13% 10%;
+    --popover-foreground: 0 0% 95%;
+
+    /* Terminal Green Primary */
+    --primary: 142 76% 48%;
+    --primary-foreground: 220 13% 6%;
+    --primary-glow: 142 76% 65%;
+
+    /* Glass Effects */
+    --glass-bg: 220 13% 12%;
+    --glass-border: 0 0% 100%;
+    --glass-opacity: 0.1;
+
+    --secondary: 217 33% 17%;
+    --secondary-foreground: 0 0% 95%;
+
+    --muted: 220 13% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    /* Blue Accent */
+    --accent: 199 89% 48%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 18%;
+    --input: 220 13% 15%;
+    --ring: 142 76% 48%;
+
+    --radius: 0.5rem;
+
+    /* Window Shadows */
+    --shadow-window: 0 20px 60px -15px rgba(0, 0, 0, 0.8);
+    --shadow-glow: 0 0 40px rgba(0, 255, 65, 0.2);
+
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+}
+
+@layer utilities {
+  /* Glass Morphism */
+  .glass {
+    background: rgba(var(--glass-bg), 0.7);
+    backdrop-filter: blur(12px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-strong {
+    background: rgba(var(--glass-bg), 0.85);
+    backdrop-filter: blur(20px) saturate(200%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+
+  /* Terminal Glow Effect */
+  .terminal-glow {
+    text-shadow: 0 0 10px rgba(0, 255, 65, 0.7),
+                 0 0 20px rgba(0, 255, 65, 0.4),
+                 0 0 30px rgba(0, 255, 65, 0.2);
+  }
+
+  /* Smooth Animations */
+  .smooth-transition {
+    transition: var(--transition-smooth);
+  }
+
+  .bounce-transition {
+    transition: var(--transition-bounce);
+  }
+
+  /* Custom Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+    }
+    50% {
+      box-shadow: 0 0 40px rgba(0, 255, 65, 0.6);
+    }
+  }
+}
+
+@layer base {
+  * {
+    @apply border-[hsl(var(--border))];
+  }
+
+  body {
+    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))];
+  }
+}
