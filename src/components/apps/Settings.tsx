@@ -1,27 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Monitor, Wifi, Bluetooth, Volume2, Battery, Palette } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { useSettings } from '@/contexts/SettingsContext';
 
 export const Settings: React.FC = () => {
-  const [brightness, setBrightness] = useState([80]);
-
-  useEffect(() => {
-    const savedBrightness = localStorage.getItem('screen_brightness');
-    if (savedBrightness) {
-      setBrightness([parseInt(savedBrightness)]);
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('screen_brightness', brightness[0].toString());
-    document.documentElement.style.filter = `brightness(${brightness[0]}%)`;
-    
-    return () => {
-      document.documentElement.style.filter = '';
-    };
-  }, [brightness]);
+  const { brightness, setBrightness } = useSettings();
 
   return (
     <div className="h-full overflow-auto p-6 bg-gradient-to-br from-background to-muted/20">

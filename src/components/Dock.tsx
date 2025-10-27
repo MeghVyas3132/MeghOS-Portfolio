@@ -15,11 +15,11 @@ const DockApp: React.FC<DockAppProps> = ({ app, onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="group relative p-3 glass rounded-xl hover:bg-primary/20 transition-all duration-300 hover:scale-110"
+      className="group relative p-3 glass rounded-xl hover:bg-primary/20 transition-all duration-150 hover:scale-110 will-change-transform"
       title={app.name}
     >
-      <Icon className="w-8 h-8 text-foreground group-hover:text-primary transition-colors" />
-      <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-popover px-3 py-1 rounded-md text-xs opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
+      <Icon className="w-8 h-8 text-foreground group-hover:text-primary transition-colors duration-150" />
+      <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-popover px-3 py-1 rounded-md text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-150 pointer-events-none whitespace-nowrap">
         {app.name}
       </div>
     </button>

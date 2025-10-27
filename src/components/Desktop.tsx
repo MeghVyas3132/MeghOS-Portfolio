@@ -4,6 +4,7 @@ import { TopBar } from './TopBar';
 import { Dock } from './Dock';
 import { Window } from './Window';
 import { WindowManagerProvider, useWindowManager } from '@/contexts/WindowManagerContext';
+import { SettingsProvider } from '@/contexts/SettingsContext';
 import { Terminal } from './apps/Terminal';
 import { Photos } from './apps/Photos';
 import { FileManager } from './apps/FileManager';
@@ -75,26 +76,26 @@ const DesktopContent: React.FC = () => {
     <>
       <div className="h-screen w-full overflow-hidden relative">
         {/* Prism Background */}
-        <div className="absolute inset-0 opacity-40">
+        <div className="absolute inset-0 opacity-30 will-change-transform">
           <Prism
             animationType="rotate"
-            timeScale={0.8}
+            timeScale={0.4}
             height={2.5}
             baseWidth={5.1}
             scale={3.6}
             hueShift={0.2}
             colorFrequency={1}
             noise={0}
-            glow={1}
+            glow={0.6}
             transparent={true}
           />
         </div>
         
         {/* Overlay for better readability */}
-        <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
+        <div className="absolute inset-0 bg-background/70 backdrop-blur-sm will-change-transform" />
         
         {/* Content */}
-        <div className="relative z-10 h-full">
+        <div className="relative z-10 h-full will-change-transform">
           <TopBar 
             onEditModeToggle={() => setIsEditMode(!isEditMode)} 
             isEditMode={isEditMode}
@@ -118,8 +119,10 @@ const DesktopContent: React.FC = () => {
 
 export const Desktop: React.FC = () => {
   return (
-    <WindowManagerProvider>
-      <DesktopContent />
-    </WindowManagerProvider>
+    <SettingsProvider>
+      <WindowManagerProvider>
+        <DesktopContent />
+      </WindowManagerProvider>
+    </SettingsProvider>
   );
 };

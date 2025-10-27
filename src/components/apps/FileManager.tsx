@@ -1,167 +1,117 @@
 import React, { useState, useEffect } from 'react';
-import { Folder, File, ChevronRight, Home } from 'lucide-react';
+import { ExternalLink, Github, FolderOpen } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const STORAGE_KEY = 'portfolio_content';
 
-interface FileItem {
-  name: string;
-  type: 'folder' | 'file';
-  children?: FileItem[];
-  content?: string;
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  demoUrl: string;
+  repoUrl: string;
+  tags: string[];
 }
 
-const getDefaultFileSystem = (): FileItem[] => [
-  {
-    name: 'home',
-    type: 'folder',
-    children: [
-      {
-        name: 'projects',
-        type: 'folder',
-        children: [
-          { name: 'kubernetes-cluster', type: 'folder' },
-          { name: 'docker-compose-stack', type: 'folder' },
-          { name: 'terraform-infrastructure', type: 'folder' },
-        ],
-      },
-      {
-        name: 'scripts',
-        type: 'folder',
-        children: [
-          { name: 'deploy.sh', type: 'file', content: '#!/bin/bash\necho "Deploying application..."' },
-          { name: 'backup.sh', type: 'file', content: '#!/bin/bash\necho "Running backup..."' },
-        ],
-      },
-      {
-        name: 'Documents',
-        type: 'folder',
-        children: [
-          { name: 'resume.pdf', type: 'file' },
-          { name: 'certificates', type: 'folder' },
-        ],
-      },
-    ],
-  },
-];
-
 export const FileManager: React.FC = () => {
-  const [fileSystem, setFileSystem] = useState<FileItem[]>(getDefaultFileSystem());
-  const [currentPath, setCurrentPath] = useState<string[]>(['home']);
-  const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    loadFileSystem();
-    window.addEventListener('storage', loadFileSystem);
-    return () => window.removeEventListener('storage', loadFileSystem);
+    loadProjects();
+    window.addEventListener('storage', loadProjects);
+    return () => window.removeEventListener('storage', loadProjects);
   }, []);
 
-  const loadFileSystem = () => {
+  const loadProjects = () => {
     const stored = localStorage.getItem(STORAGE_KEY);
     if (stored) {
       try {
         const data = JSON.parse(stored);
-        // You can extend this to load custom project structure from data
-        // For now, we'll keep the default structure
-        setFileSystem(getDefaultFileSystem());
+        if (data.projects && Array.isArray(data.projects)) {
+          setProjects(data.projects);
+        }
       } catch (error) {
-        console.error('Failed to parse file system');
+        console.error('Failed to parse projects');
       }
     }
   };
 
-  const getCurrentFolder = (): FileItem | null => {
-    let current: FileItem | undefined = fileSystem[0];
-    
-    for (let i = 1; i < currentPath.length; i++) {
-      if (!current?.children) return null;
-      current = current.children.find(item => item.name === currentPath[i]);
-      if (!current) return null;
-    }
-    
-    return current || null;
-  };
-
-  const currentFolder = getCurrentFolder();
-
-  const handleItemClick = (item: FileItem) => {
-    if (item.type === 'folder') {
-      setCurrentPath([...currentPath, item.name]);
-      setSelectedFile(null);
-    } else {
-      setSelectedFile(item);
-    }
-  };
-
-  const navigateUp = () => {
-    if (currentPath.length > 1) {
-      setCurrentPath(currentPath.slice(0, -1));
-      setSelectedFile(null);
-    }
-  };
-
   return (
-    <div className="h-full flex">
-      {/* File Browser */}
-      <div className="w-2/3 border-r border-border flex flex-col">
-        {/* Path Bar */}
-        <div className="border-b border-border p-3 flex items-center gap-2 bg-muted/20">
-          <Home className="w-4 h-4 text-muted-foreground" />
-          <span className="text-sm font-mono text-foreground">/{currentPath.join('/')}</span>
-        </div>
-
-        {/* File List */}
-        <div className="flex-1 overflow-auto p-4">
-          {currentPath.length > 1 && (
-            <button
-              onClick={navigateUp}
-              className="w-full flex items-center gap-3 p-3 hover:bg-muted/50 rounded-lg transition-colors text-left"
-            >
-              <Folder className="w-5 h-5 text-primary" />
-              <span className="font-medium">..</span>
-            </button>
-          )}
-          
-          {currentFolder?.children?.map((item, index) => (
-            <button
-              key={index}
-              onClick={() => handleItemClick(item)}
-              className={`
-                w-full flex items-center gap-3 p-3 hover:bg-muted/50 rounded-lg transition-colors text-left
-                ${selectedFile?.name === item.name ? 'bg-primary/10' : ''}
-              `}
-            >
-              {item.type === 'folder' ? (
-                <Folder className="w-5 h-5 text-primary" />
-              ) : (
-                <File className="w-5 h-5 text-accent" />
-              )}
-              <span className="font-medium">{item.name}</span>
-              {item.type === 'folder' && (
-                <ChevronRight className="w-4 h-4 ml-auto text-muted-foreground" />
-              )}
-            </button>
-          ))}
+    <div className="h-full flex flex-col">
+      {/* Header */}
+      <div className="border-b border-border p-4 bg-muted/20">
+        <div className="flex items-center gap-3">
+          <FolderOpen className="w-6 h-6 text-primary" />
+          <h2 className="text-2xl font-bold text-primary">My Projects</h2>
         </div>
       </div>
 
-      {/* File Preview */}
-      <div className="flex-1 p-6 bg-black/30">
-        {selectedFile ? (
-          <div className="space-y-4">
-            <div className="flex items-center gap-3">
-              <File className="w-6 h-6 text-accent" />
-              <h3 className="text-lg font-semibold">{selectedFile.name}</h3>
+      {/* Projects List */}
+      <div className="flex-1 overflow-auto p-6">
+        {projects.length === 0 ? (
+          <div className="h-full flex items-center justify-center">
+            <div className="text-center space-y-4 max-w-md">
+              <FolderOpen className="w-16 h-16 text-muted-foreground mx-auto" />
+              <h3 className="text-xl font-semibold text-foreground">No Projects Yet</h3>
+              <p className="text-sm text-muted-foreground">
+                Add your first project in admin mode (Alt+Shift+A) to showcase your work.
+              </p>
             </div>
-            
-            {selectedFile.content && (
-              <pre className="p-4 bg-black/50 rounded-lg font-mono text-sm text-primary terminal-glow overflow-auto">
-                {selectedFile.content}
-              </pre>
-            )}
           </div>
         ) : (
-          <div className="h-full flex items-center justify-center text-muted-foreground">
-            <p>Select a file to preview</p>
+          <div className="max-w-4xl mx-auto space-y-6">
+            {projects.map((project) => (
+              <div
+                key={project.id}
+                className="glass-strong rounded-lg p-6 space-y-4 hover:border-primary/50 transition-all animate-fade-in"
+              >
+                <h3 className="text-xl font-semibold text-foreground">{project.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{project.description}</p>
+                
+                {project.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {project.tags.map((tag, idx) => (
+                      <span
+                        key={idx}
+                        className="px-3 py-1 text-xs rounded-full bg-primary/10 text-primary border border-primary/20"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex gap-3 pt-2">
+                  {project.demoUrl && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex items-center gap-2"
+                      onClick={() => window.open(project.demoUrl, '_blank')}
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                      Live Demo
+                    </Button>
+                  )}
+                  {project.repoUrl && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="flex items-center gap-2"
+                      onClick={() => window.open(project.repoUrl, '_blank')}
+                    >
+                      <Github className="w-4 h-4" />
+                      View Code
+                    </Button>
+                  )}
+                  {!project.demoUrl && !project.repoUrl && (
+                    <p className="text-xs text-muted-foreground italic">
+                      Add demo or repository links in admin mode to display buttons
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
           </div>
         )}
       </div>

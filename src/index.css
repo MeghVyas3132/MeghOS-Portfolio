@@ -55,20 +55,83 @@ All colors MUST be HSL.
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-bounce: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   }
+
+  /* Performance Optimizations */
+  * {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  html, body {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+  }
+
+  /* Smooth scrolling for all containers */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: hsl(var(--primary) / 0.3) transparent;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--primary) / 0.3);
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--primary) / 0.5);
+  }
+
+  /* Enable smooth scrolling with hardware acceleration */
+  .overflow-auto,
+  .overflow-y-auto,
+  .overflow-x-auto,
+  .overflow-scroll {
+    -webkit-overflow-scrolling: touch;
+    will-change: scroll-position;
+    transform: translateZ(0);
+  }
 }
 
 @layer utilities {
-  /* Glass Morphism */
+  /* Glass Morphism - Optimized for Performance */
   .glass {
     background: rgba(var(--glass-bg), 0.7);
     backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.1);
+    transform: translateZ(0);
+    will-change: transform;
   }
 
   .glass-strong {
     background: rgba(var(--glass-bg), 0.85);
-    backdrop-filter: blur(20px) saturate(200%);
+    backdrop-filter: blur(16px) saturate(200%);
+    -webkit-backdrop-filter: blur(16px) saturate(200%);
     border: 1px solid rgba(255, 255, 255, 0.15);
+    transform: translateZ(0);
+    will-change: transform;
+  }
+
+  /* No blur during drag for better performance */
+  .glass-dragging {
+    background: rgba(var(--glass-bg), 0.95);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateZ(0);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   }
 
   /* Terminal Glow Effect */
@@ -87,13 +150,25 @@ All colors MUST be HSL.
     transition: var(--transition-bounce);
   }
 
-  /* Custom Animations */
+  /* Custom Animations - Optimized for 60fps */
   .animate-fade-in {
-    animation: fadeIn 0.5s ease-out;
+    animation: fadeIn 0.15s ease-out;
   }
 
   .animate-window-open {
-    animation: windowOpen 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    animation: windowOpen 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-window-close {
+    animation: windowClose 0.15s cubic-bezier(0.4, 0, 1, 1) forwards;
+  }
+
+  .animate-window-minimize {
+    animation: windowMinimize 0.2s cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  }
+
+  .animate-window-maximize {
+    animation: windowMaximize 0.15s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
 
   .animate-pulse-glow {
@@ -103,22 +178,53 @@ All colors MUST be HSL.
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translate3d(0, 5px, 0);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translate3d(0, 0, 0);
     }
   }
 
   @keyframes windowOpen {
-    from {
+    0% {
       opacity: 0;
-      transform: scale(0.95);
+      transform: scale3d(0.95, 0.95, 1);
     }
-    to {
+    100% {
       opacity: 1;
-      transform: scale(1);
+      transform: scale3d(1, 1, 1);
+    }
+  }
+
+  @keyframes windowClose {
+    0% {
+      opacity: 1;
+      transform: scale3d(1, 1, 1);
+    }
+    100% {
+      opacity: 0;
+      transform: scale3d(0.95, 0.95, 1);
+    }
+  }
+
+  @keyframes windowMinimize {
+    0% {
+      opacity: 1;
+      transform: scale3d(1, 1, 1) translate3d(0, 0, 0);
+    }
+    100% {
+      opacity: 0;
+      transform: scale3d(0.1, 0.1, 1) translate3d(0, 50vh, 0);
+    }
+  }
+
+  @keyframes windowMaximize {
+    0% {
+      transform: scale3d(0.98, 0.98, 1);
+    }
+    100% {
+      transform: scale3d(1, 1, 1);
     }
   }
 
@@ -129,6 +235,27 @@ All colors MUST be HSL.
     50% {
       box-shadow: 0 0 40px rgba(0, 255, 65, 0.6);
     }
+  }
+
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    90% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(-100vh) translateX(20px);
+      opacity: 0;
+    }
+  }
+
+  .animate-float {
+    animation: float 5s ease-in-out infinite;
   }
 }
 
