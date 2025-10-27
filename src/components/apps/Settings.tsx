@@ -25,7 +25,7 @@ export const Settings: React.FC = () => {
 
   return (
     <div className="h-full overflow-auto p-6 bg-gradient-to-br from-background to-muted/20">
-      <h2 className="text-2xl font-bold mb-6 terminal-glow">System Settings</h2>
+      <h2 className="text-2xl font-bold mb-6 text-primary terminal-glow">System Settings</h2>
 
       <div className="space-y-6">
         {/* Display Settings */}

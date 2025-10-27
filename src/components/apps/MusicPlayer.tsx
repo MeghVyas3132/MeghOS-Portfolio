@@ -117,7 +117,7 @@ export const MusicPlayer: React.FC = () => {
         </div>
 
         <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold terminal-glow">{DEMO_SONGS[currentSong].title}</h2>
+          <h2 className="text-3xl font-bold text-primary terminal-glow">{DEMO_SONGS[currentSong].title}</h2>
           <p className="text-lg text-muted-foreground">{DEMO_SONGS[currentSong].artist}</p>
         </div>
 

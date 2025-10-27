@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { WindowState, AppInfo } from '@/types/desktop';
+import { WindowState, AppInfo } from '@/types/Desktop';
 
 interface WindowManagerContextType {
   windows: WindowState[];

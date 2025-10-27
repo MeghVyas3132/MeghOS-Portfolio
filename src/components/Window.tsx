@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { X, Minimize, Maximize, Maximize2 } from 'lucide-react';
-import { WindowState } from '@/types/desktop';
+import { WindowState } from '@/types/Desktop';
 import { useWindowManager } from '@/contexts/WindowManagerContext';
 import { useDraggable } from '@/hooks/useDraggable';
 

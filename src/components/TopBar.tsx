@@ -16,21 +16,21 @@ export const TopBar: React.FC<TopBarProps> = ({ onEditModeToggle, isEditMode }) 
     return () => clearInterval(timer);
   }, []);
 
-  const formattedTime = currentTime.toLocaleTimeString('en-US', {
+  const formattedTime = currentTime.toLocaleTimeString('en-IN', {
     hour: '2-digit',
     minute: '2-digit',
   });
 
-  const formattedDate = currentTime.toLocaleDateString('en-US', {
+  const formattedDate = currentTime.toLocaleDateString('en-IN', {
     weekday: 'short',
     month: 'short',
     day: 'numeric',
   });
 
   return (
-    <div className="h-8 glass-strong border-b border-border flex items-center justify-between px-4 relative z-50">
+    <div className="h-8 glass-strong border-b border-border flex items-center justify-between px-3 relative z-50">
       <div className="flex items-center gap-4">
-        <span className="text-sm font-bold text-primary terminal-glow">Linux Portfolio</span>
+        <span className="text-sm font-bold text-primary terminal-glow">Megh's Portfolio</span>
       </div>
 
       <div className="flex items-center gap-4">

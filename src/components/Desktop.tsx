@@ -12,7 +12,8 @@ import { Browser } from './apps/Browser';
 import { MusicPlayer } from './apps/MusicPlayer';
 import { Settings as SettingsApp } from './apps/Settings';
 import { EditMode } from './EditMode';
-import { AppInfo } from '@/types/desktop';
+import { AppInfo } from '@/types/Desktop';
+import Prism from './Prism';
 
 const APPS: AppInfo[] = [
   {
@@ -72,20 +73,42 @@ const DesktopContent: React.FC = () => {
 
   return (
     <>
-      <div className="h-screen w-full overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
-        <TopBar 
-          onEditModeToggle={() => setIsEditMode(!isEditMode)} 
-          isEditMode={isEditMode}
-        />
-        
-        {/* Desktop Area */}
-        <div className="h-[calc(100vh-2rem)] relative">
-          {windows.map((window) => (
-            <Window key={window.id} window={window} />
-          ))}
+      <div className="h-screen w-full overflow-hidden relative">
+        {/* Prism Background */}
+        <div className="absolute inset-0 opacity-40">
+          <Prism
+            animationType="rotate"
+            timeScale={0.8}
+            height={2.5}
+            baseWidth={5.1}
+            scale={3.6}
+            hueShift={0.2}
+            colorFrequency={1}
+            noise={0}
+            glow={1}
+            transparent={true}
+          />
         </div>
+        
+        {/* Overlay for better readability */}
+        <div className="absolute inset-0 bg-background/70 backdrop-blur-sm" />
+        
+        {/* Content */}
+        <div className="relative z-10 h-full">
+          <TopBar 
+            onEditModeToggle={() => setIsEditMode(!isEditMode)} 
+            isEditMode={isEditMode}
+          />
+          
+          {/* Desktop Area */}
+          <div className="h-[calc(100vh-2rem)] relative">
+            {windows.map((window) => (
+              <Window key={window.id} window={window} />
+            ))}
+          </div>
 
-        <Dock apps={APPS} />
+          <Dock apps={APPS} />
+        </div>
       </div>
 
       {isEditMode && <EditMode onClose={() => setIsEditMode(false)} />}

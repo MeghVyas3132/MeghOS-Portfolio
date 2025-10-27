@@ -1,9 +1,29 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 
 interface CommandHistory {
   command: string;
   output: string;
 }
+
+interface FileSystem {
+  [key: string]: string[] | FileSystem;
+}
+
+const FILE_SYSTEM: FileSystem = {
+  home: {
+    devops: ['Documents', 'Downloads', 'Pictures', 'Videos', 'projects', 'scripts', 'kubernetes', 'terraform', 'ansible', '.config', '.bashrc', '.gitconfig'],
+  },
+  var: {
+    log: ['nginx', 'syslog', 'kern.log'],
+    www: ['html'],
+  },
+  etc: ['nginx', 'docker', 'systemd', 'ssh'],
+  usr: {
+    bin: ['docker', 'kubectl', 'git', 'terraform', 'ansible'],
+    lib: ['systemd'],
+  },
+};
 
 const COMMAND_RESPONSES: Record<string, string> = {
   help: `Available commands:
@@ -15,7 +35,7 @@ const COMMAND_RESPONSES: Record<string, string> = {
   Terraform:       terraform plan, terraform apply, terraform destroy
   Ansible:         ansible-playbook, ansible-vault
   CI/CD:           jenkins status, gitlab-runner status
-  Files:           ls, pwd, cat, find, grep
+  Files:           ls, pwd, cd, cd.., cat, find, grep
   Network:         ping, curl, wget, traceroute, nslookup
   Other:           whoami, neofetch, clear, help`,
   
@@ -327,8 +347,6 @@ Runners: 4
   - runner-3: active, tags: ansible,deploy
   - runner-4: active, tags: test,integration`,
 
-  ls: `Documents  Downloads  Pictures  Videos  projects  scripts  kubernetes  terraform  ansible  .config  .bashrc  .gitconfig`,
-  
   pwd: `/home/devops`,
   
   'cat /etc/os-release': `NAME="Ubuntu"
@@ -394,24 +412,25 @@ Address: 2a00:1450:4009:815::200e`,
   
   whoami: `Megh Vyas`,
   
-  neofetch: `                    ./+o+-       MeghVyas@portfolio
-                  yyyyy- -yyyyyy+    OS: Ubuntu 22.04 LTS x86_64
-               ://+//////-yyyyyyo    Host: Production Server
-           .++ .:/++++++/-.+sss/\`    Kernel: 5.15.0-91-generic
-         .:++o:  /++++++++/:--:/-    Uptime: 5 days, 12 hours
-        o:+o+:++.\`...\`\`\`.-/oo+++++/   Packages: 2847 (dpkg)
-       .:+o:+o/.          \`+sssoo+/  Shell: bash 5.1.16
-  .++/+:+oo+o:\`             /sssooo. Terminal: xterm-256color
- /+++//+:\`oo+o               /::--:. CPU: Intel Xeon (8) @ 3.2GHz
- \\+/+o+++\`o++o               ++////.  GPU: VMware SVGA II
-  .++.o+++oo+:\`             /dddhhh. Memory: 8192MB / 16384MB
-       .+.o+oo:.          \`oddhhhh+  Disk: 120GB / 500GB
-        \\+.++o+o\`\`-\`\`\`\`.:ohdhhhhh+   
-         \`:o+++ \`ohhhhhhhhyo++os:    Running: Docker, K8s, Nginx
-           .o:\`.syhhhhhhh/.oo++o\`   Deployed: 47 containers
-               /osyyyyyyo++ooo+++/   Uptime: 99.98%
-                   \`\`\`\`\` +oo+++o\\:
-                          \`oo++.`,
+  neofetch: `\x1b[38;5;208m                          \x1b[1;37mMeghVyas\x1b[0m@\x1b[1;37mportfolio\x1b[0m
+\x1b[38;5;208m              .-/+oossssoo+/-.               \x1b[0m\x1b[0;36mOS:\x1b[0m Ubuntu 22.04 LTS x86_64
+\x1b[38;5;208m          \`:+ssssssssssssssssss+:\`           \x1b[0m\x1b[0;36mHost:\x1b[0m Production Server
+\x1b[38;5;208m        -+ssssssssssssssssssyyssss+-         \x1b[0m\x1b[0;36mKernel:\x1b[0m 5.15.0-91-generic
+\x1b[38;5;208m      .ossssssssssssssssssd\x1b[1;37mMM\x1b[38;5;208mMysssso.       \x1b[0m\x1b[0;36mUptime:\x1b[0m 5 days, 12 hours
+\x1b[38;5;208m     /sssssssssss\x1b[1;37mhd\x1b[38;5;208mysso++os\x1b[1;37myMM\x1b[38;5;208mdysssss/      \x1b[0m\x1b[0;36mPackages:\x1b[0m 2847 (dpkg)
+\x1b[38;5;208m    /ssssssssss\x1b[1;37mhm\x1b[38;5;208mysso++os\x1b[1;37myMMN\x1b[38;5;208mm\x1b[1;37md\x1b[38;5;208mhssssss/     \x1b[0m\x1b[0;36mShell:\x1b[0m bash 5.1.16
+\x1b[38;5;208m   .sssssssss\x1b[1;37mhMM\x1b[38;5;208mmyo++os\x1b[1;37myMMMMm\x1b[38;5;208mm\x1b[1;37md\x1b[38;5;208mhssssss.    \x1b[0m\x1b[0;36mTerminal:\x1b[0m xterm-256color
+\x1b[38;5;208m   +sss\x1b[1;37mhh\x1b[38;5;208mhsssss\x1b[1;37myyy\x1b[38;5;208msssss\x1b[1;37myMMM\x1b[38;5;208my\x1b[1;37mdd\x1b[38;5;208mhssssss+    \x1b[0m\x1b[0;36mCPU:\x1b[0m Intel Xeon (8) @ 3.2GHz
+\x1b[38;5;208m   oss\x1b[1;37myNM\x1b[38;5;208mmssssss\x1b[1;37mdMM\x1b[38;5;208mmssssss\x1b[1;37mhMM\x1b[38;5;208mmdyysssso    \x1b[0m\x1b[0;36mGPU:\x1b[0m VMware SVGA II
+\x1b[38;5;208m   oss\x1b[1;37myNM\x1b[38;5;208mmssssss\x1b[1;37mdMM\x1b[38;5;208mmssssss\x1b[1;37mhMM\x1b[38;5;208mmdyysssso    \x1b[0m\x1b[0;36mMemory:\x1b[0m 8192MB / 16384MB
+\x1b[38;5;208m   +sss\x1b[1;37mhh\x1b[38;5;208mhsssss\x1b[1;37myyy\x1b[38;5;208msssss\x1b[1;37myMMM\x1b[38;5;208my\x1b[1;37mdd\x1b[38;5;208mhssssss+    \x1b[0m\x1b[0;36mDisk:\x1b[0m 120GB / 500GB
+\x1b[38;5;208m   .sssssssss\x1b[1;37mhMM\x1b[38;5;208mmyo++os\x1b[1;37myMMMMm\x1b[38;5;208mm\x1b[1;37md\x1b[38;5;208mhssssss.    \x1b[0m
+\x1b[38;5;208m    /ssssssssss\x1b[1;37mhm\x1b[38;5;208mysso++os\x1b[1;37myMMN\x1b[38;5;208mm\x1b[1;37md\x1b[38;5;208mhssssss/     \x1b[0m\x1b[0;36mRunning:\x1b[0m Docker, K8s, Nginx
+\x1b[38;5;208m     /sssssssssss\x1b[1;37mhd\x1b[38;5;208mysso++os\x1b[1;37myMM\x1b[38;5;208mdysssss/      \x1b[0m\x1b[0;36mDeployed:\x1b[0m 47 containers
+\x1b[38;5;208m      .ossssssssssssssssssd\x1b[1;37mMM\x1b[38;5;208mMysssso.       \x1b[0m\x1b[0;36mUptime:\x1b[0m 99.98%
+\x1b[38;5;208m        -+ssssssssssssssssssyyssss+-         \x1b[0m
+\x1b[38;5;208m          \`:+ssssssssssssssssss+:\`           \x1b[0m
+\x1b[38;5;208m              \`.-/+oossssoo+/-.               \x1b[0m`,
   
   clear: 'CLEAR_TERMINAL',
 };
@@ -421,6 +440,7 @@ export const Terminal: React.FC = () => {
     { command: '', output: 'Linux Portfolio Terminal v1.0.0\nType "help" for available commands.\n' }
   ]);
   const [currentCommand, setCurrentCommand] = useState('');
+  const [currentDir, setCurrentDir] = useState('/home/devops');
   const terminalRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -434,15 +454,142 @@ export const Terminal: React.FC = () => {
     }
   }, [history]);
 
-  const handleCommand = (cmd: string) => {
-    const trimmedCmd = cmd.trim().toLowerCase();
+  const getDirectoryContents = (path: string): string | null => {
+    const parts = path.split('/').filter(p => p);
+    let current: any = FILE_SYSTEM;
     
-    if (trimmedCmd === 'clear') {
+    for (const part of parts) {
+      if (current[part]) {
+        current = current[part];
+      } else {
+        return null;
+      }
+    }
+    
+    if (Array.isArray(current)) {
+      return current.join('  ');
+    } else if (typeof current === 'object') {
+      return Object.keys(current).join('  ');
+    }
+    return null;
+  };
+
+  const handleCommand = (cmd: string) => {
+    const trimmedCmd = cmd.trim();
+    const lowerCmd = trimmedCmd.toLowerCase();
+    
+    if (lowerCmd === 'clear') {
       setHistory([]);
       return;
     }
 
-    const output = COMMAND_RESPONSES[trimmedCmd] || 
+    // Handle pwd command
+    if (lowerCmd === 'pwd') {
+      setHistory(prev => [...prev, { command: cmd, output: currentDir }]);
+      return;
+    }
+
+    // Handle ls command
+    if (lowerCmd === 'ls') {
+      const contents = getDirectoryContents(currentDir);
+      const output = contents || 'ls: cannot access: No such file or directory';
+      setHistory(prev => [...prev, { command: cmd, output }]);
+      return;
+    }
+
+    // Handle cd command
+    if (lowerCmd.startsWith('cd')) {
+      const args = trimmedCmd.split(' ');
+      let newDir = currentDir;
+      
+      if (args.length === 1 || args[1] === '~') {
+        // cd or cd ~ goes to home
+        newDir = '/home/devops';
+      } else if (args[1] === '..') {
+        // cd .. goes up one directory
+        const parts = currentDir.split('/').filter(p => p);
+        if (parts.length > 1) {
+          parts.pop();
+          newDir = '/' + parts.join('/');
+        } else {
+          newDir = '/';
+        }
+      } else if (args[1] === '/') {
+        // cd / goes to root
+        newDir = '/';
+      } else if (args[1].startsWith('/')) {
+        // Absolute path
+        const targetPath = args[1];
+        const parts = targetPath.split('/').filter(p => p);
+        let current: any = FILE_SYSTEM;
+        let valid = true;
+        
+        for (const part of parts) {
+          if (current[part]) {
+            current = current[part];
+          } else {
+            valid = false;
+            break;
+          }
+        }
+        
+        if (valid && typeof current === 'object' && !Array.isArray(current)) {
+          newDir = targetPath;
+        } else {
+          setHistory(prev => [...prev, { 
+            command: cmd, 
+            output: `cd: ${args[1]}: No such file or directory` 
+          }]);
+          return;
+        }
+      } else {
+        // Relative path
+        const targetPath = currentDir === '/' ? `/${args[1]}` : `${currentDir}/${args[1]}`;
+        const parts = targetPath.split('/').filter(p => p);
+        let current: any = FILE_SYSTEM;
+        let valid = true;
+        
+        for (const part of parts) {
+          if (current[part]) {
+            current = current[part];
+          } else {
+            valid = false;
+            break;
+          }
+        }
+        
+        if (valid && typeof current === 'object' && !Array.isArray(current)) {
+          newDir = targetPath;
+        } else {
+          setHistory(prev => [...prev, { 
+            command: cmd, 
+            output: `cd: ${args[1]}: No such file or directory` 
+          }]);
+          return;
+        }
+      }
+      
+      setCurrentDir(newDir);
+      setHistory(prev => [...prev, { command: cmd, output: '' }]);
+      return;
+    }
+
+    // Handle cd.. as an alias for cd ..
+    if (lowerCmd === 'cd..') {
+      const parts = currentDir.split('/').filter(p => p);
+      let newDir = currentDir;
+      if (parts.length > 1) {
+        parts.pop();
+        newDir = '/' + parts.join('/');
+      } else {
+        newDir = '/';
+      }
+      setCurrentDir(newDir);
+      setHistory(prev => [...prev, { command: cmd, output: '' }]);
+      return;
+    }
+
+    const output = COMMAND_RESPONSES[lowerCmd] || 
       `Command not found: ${cmd}\nType "help" for available commands.`;
 
     setHistory(prev => [...prev, { command: cmd, output }]);
@@ -468,25 +615,27 @@ export const Terminal: React.FC = () => {
         <div key={index} className="mb-2">
           {entry.command && (
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-primary terminal-glow">ubuntu@MeghVyas:~$</span>
+              <span className="text-primary terminal-glow">ubuntu@MeghVyas:{currentDir}$</span>
               <span className="text-foreground">{entry.command}</span>
             </div>
           )}
-          <pre className="text-muted-foreground whitespace-pre-wrap font-mono text-xs leading-relaxed">
-            {entry.output}
-          </pre>
+          {entry.output && (
+            <pre className="text-muted-foreground whitespace-pre-wrap font-mono text-xs leading-relaxed">
+              {entry.output}
+            </pre>
+          )}
         </div>
       ))}
       
       <div className="flex items-center gap-2">
-        <span className="text-primary terminal-glow">ubuntu@MeghVyas:~$</span>
+        <span className="text-primary terminal-glow">ubuntu@MeghVyas:{currentDir}$</span>
         <input
           ref={inputRef}
           type="text"
           value={currentCommand}
           onChange={(e) => setCurrentCommand(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="flex-1 bg-transparent outline-none text-foreground font-mono"
+          className="flex-1 bg-transparent outline-none border-none focus:outline-none focus:ring-0 focus:border-none text-foreground font-mono"
           autoFocus
         />
       </div>

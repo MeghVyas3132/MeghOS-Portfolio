@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { X, Save, Loader2, Lock } from 'lucide-react';
 import { toast } from 'sonner';
 
-const ADMIN_PASSWORD = 'devops123';
+const ADMIN_PASSWORD = 'Ikon@3132';
 const STORAGE_KEY = 'portfolio_content';
 
 interface EditModeProps {
@@ -99,7 +99,7 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
               onClick={onClose}
               className="p-2 hover:bg-muted/50 rounded-lg transition-colors"
             >
-              <X className="w-5 h-5" />
+              <X className="w-5 h-5 text-muted-foreground" />
             </button>
           </div>
 
@@ -112,12 +112,12 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
-                className="bg-background/50"
+                className="glass border-primary/30"
                 placeholder="Enter admin password"
                 autoFocus
               />
               <p className="text-xs text-muted-foreground">
-                Default password: <code className="text-primary">devops123</code>
+                Default password: <code className="text-primary">Refer me and i will tell you the Default Password</code>
               </p>
             </div>
           </div>
@@ -126,7 +126,7 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
             <Button variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={handlePasswordSubmit} className="bg-primary hover:bg-primary/90">
+            <Button onClick={handlePasswordSubmit} variant="outline" className="bg-primary hover:bg-primary/90 text-primary-foreground border-primary">
               <Lock className="w-4 h-4 mr-2" />
               Authenticate
             </Button>
@@ -138,14 +138,14 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-      <div className="glass-strong max-w-2xl w-full rounded-xl p-6 space-y-6 animate-window-open">
+      <div className="glass-strong max-w-2xl w-full rounded-xl p-6 space-y-6 animate-window-open bg-background/95">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold text-primary terminal-glow">Edit Portfolio Content</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-muted/50 rounded-lg transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 text-muted-foreground" />
           </button>
         </div>
 
@@ -156,7 +156,7 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
               id="name"
               value={content.name}
               onChange={(e) => setContent({ ...content, name: e.target.value })}
-              className="bg-background/50"
+              className="glass border-primary/30"
             />
           </div>
 
@@ -166,7 +166,7 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
               id="role"
               value={content.role}
               onChange={(e) => setContent({ ...content, role: e.target.value })}
-              className="bg-background/50"
+              className="glass border-primary/30"
             />
           </div>
 
@@ -176,7 +176,7 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
               id="about"
               value={content.about}
               onChange={(e) => setContent({ ...content, about: e.target.value })}
-              className="bg-background/50 min-h-[120px]"
+              className="glass border-primary/30 min-h-[120px]"
             />
           </div>
 
@@ -186,23 +186,27 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
               id="skills"
               value={content.skills}
               onChange={(e) => setContent({ ...content, skills: e.target.value })}
-              className="bg-background/50"
+              className="glass border-primary/30"
               placeholder="Docker, Kubernetes, Linux, etc."
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="googleDrivePhotos">Google Drive Photos Folder ID</Label>
+            <Label htmlFor="googleDrivePhotos">Photo URLs</Label>
             <Input
               id="googleDrivePhotos"
               value={content.googleDrivePhotos}
               onChange={(e) => setContent({ ...content, googleDrivePhotos: e.target.value })}
-              className="bg-background/50"
-              placeholder="Enter Google Drive folder ID"
+              className="glass border-primary/30"
+              placeholder="https://i.imgur.com/abc.jpg, https://i.imgur.com/xyz.png"
             />
-            <p className="text-xs text-muted-foreground">
-              Share your folder publicly and paste the folder ID from the URL
-            </p>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p className="font-semibold text-primary">✅ Recommended: Use Imgur (easiest!)</p>
+              <p>1. Go to imgur.com/upload → Upload photos</p>
+              <p>2. Right-click each → "Copy image address"</p>
+              <p>3. Paste URLs here, separated by commas</p>
+              <p className="text-[10px] text-amber-400 mt-2">⚠️ Google Drive doesn't work due to CORS. Use Imgur, Cloudinary, or any direct image URLs instead.</p>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -211,7 +215,7 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
               id="resumeUrl"
               value={content.resumeUrl}
               onChange={(e) => setContent({ ...content, resumeUrl: e.target.value })}
-              className="bg-background/50"
+              className="glass border-primary/30"
               placeholder="Enter Google Drive resume link"
             />
             <p className="text-xs text-muted-foreground">

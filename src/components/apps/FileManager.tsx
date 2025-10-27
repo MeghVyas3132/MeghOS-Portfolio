@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Folder, File, ChevronRight, Home } from 'lucide-react';
+
+const STORAGE_KEY = 'portfolio_content';
 
 interface FileItem {
   name: string;
@@ -8,7 +10,7 @@ interface FileItem {
   content?: string;
 }
 
-const FILE_SYSTEM: FileItem[] = [
+const getDefaultFileSystem = (): FileItem[] => [
   {
     name: 'home',
     type: 'folder',
@@ -43,11 +45,32 @@ const FILE_SYSTEM: FileItem[] = [
 ];
 
 export const FileManager: React.FC = () => {
+  const [fileSystem, setFileSystem] = useState<FileItem[]>(getDefaultFileSystem());
   const [currentPath, setCurrentPath] = useState<string[]>(['home']);
   const [selectedFile, setSelectedFile] = useState<FileItem | null>(null);
 
+  useEffect(() => {
+    loadFileSystem();
+    window.addEventListener('storage', loadFileSystem);
+    return () => window.removeEventListener('storage', loadFileSystem);
+  }, []);
+
+  const loadFileSystem = () => {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored) {
+      try {
+        const data = JSON.parse(stored);
+        // You can extend this to load custom project structure from data
+        // For now, we'll keep the default structure
+        setFileSystem(getDefaultFileSystem());
+      } catch (error) {
+        console.error('Failed to parse file system');
+      }
+    }
+  };
+
   const getCurrentFolder = (): FileItem | null => {
-    let current: FileItem | undefined = FILE_SYSTEM[0];
+    let current: FileItem | undefined = fileSystem[0];
     
     for (let i = 1; i < currentPath.length; i++) {
       if (!current?.children) return null;

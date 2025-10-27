@@ -45,7 +45,7 @@ export const About: React.FC = () => {
           <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center ring-4 ring-primary/20 animate-pulse-glow">
             <User className="w-16 h-16 text-primary-foreground" />
           </div>
-          <h1 className="text-4xl font-bold text-foreground terminal-glow">{content.name}</h1>
+          <h1 className="text-4xl font-bold text-primary terminal-glow">{content.name}</h1>
           <p className="text-xl text-primary">{content.role}</p>
         </div>
 

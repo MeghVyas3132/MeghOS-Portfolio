@@ -49,7 +49,7 @@ All colors MUST be HSL.
 
     /* Window Shadows */
     --shadow-window: 0 20px 60px -15px rgba(0, 0, 0, 0.8);
-    --shadow-glow: 0 0 40px rgba(0, 255, 65, 0.2);
+    --shadow-glow: 0 0 40px rgb(0, 255, 64);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -92,6 +92,10 @@ All colors MUST be HSL.
     animation: fadeIn 0.5s ease-out;
   }
 
+  .animate-window-open {
+    animation: windowOpen 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
   .animate-pulse-glow {
     animation: pulseGlow 2s ease-in-out infinite;
   }
@@ -104,6 +108,17 @@ All colors MUST be HSL.
     to {
       opacity: 1;
       transform: translateY(0);
+    }
+  }
+
+  @keyframes windowOpen {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
     }
   }
 
