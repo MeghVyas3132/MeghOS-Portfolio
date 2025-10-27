@@ -8,7 +8,7 @@ Your portfolio has an **Edit Mode** that allows you to customize all content wit
 
 1. Look for the **🔒 Lock icon** in the top-right corner of your portfolio
 2. Click it to open the authentication dialog
-3. Enter password: `devops123`
+3. Enter your password
 4. You're now in Edit Mode!
 
 ---
@@ -111,12 +111,6 @@ Consider adding:
 
 ## 🎨 Changing the Theme
 
-### Change Password
-Edit `src/components/EditMode.tsx`:
-```typescript
-const ADMIN_PASSWORD = 'your-new-password';
-```
-
 ### Colors
 Colors are defined in `src/index.css`. The main theme color is:
 ```css
@@ -213,9 +207,8 @@ npm run preview
 ## 🔐 Security Note
 
 **Remember**: This portfolio stores data in browser localStorage. For production:
-- Change the default password immediately
-- Consider implementing proper backend authentication
-- Don't store sensitive information
+- Consider implementing proper backend authentication if needed
+- Don't store sensitive information in localStorage
 
 ---
 

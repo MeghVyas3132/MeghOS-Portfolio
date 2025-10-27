@@ -6,16 +6,16 @@
 - [ ] Upload your resume to Google Drive
 - [ ] Set sharing to "Anyone with the link can view"
 - [ ] Copy the share link (format: `https://drive.google.com/file/d/FILE_ID/view`)
-- [ ] Go to Admin Mode (🔒 icon, password: `Ikon@3132`)
+- [ ] Go to Edit Mode (🔒 icon)
 - [ ] Paste the link in "Resume URL" field
 - [ ] Click "Save All Changes"
 
 ### ✅ 2. Add Profile Photo (Optional)
-- [ ] In Admin Mode, upload a profile photo URL
+- [ ] In Edit Mode, upload a profile photo URL
 - [ ] Or add the image to `/src/assets/` and reference it
 
 ### ✅ 3. Update Projects
-- [ ] Add all your projects via Admin Mode → Projects section
+- [ ] Add all your projects via Edit Mode → Projects section
 - [ ] Include: name, description, tech stack, demo link, repo link
 
 ### ✅ 4. Verify Contact Info
@@ -39,7 +39,7 @@ This project doesn't use any API keys or environment variables - you're good to 
 ## Known Limitations
 
 ### localStorage Won't Persist
-- Changes made via Admin Mode are stored in browser localStorage
+- Changes made via Edit Mode are stored in browser localStorage
 - These changes **won't persist** after you redeploy from GitHub
 - **Solution**: Always update default values in the code before deploying
 
@@ -66,7 +66,7 @@ This project doesn't use any API keys or environment variables - you're good to 
 - Use format: `https://drive.google.com/file/d/FILE_ID/view`
 
 ### Content Not Updating?
-- If you made changes via Admin Mode and then redeployed, they're lost
+- If you made changes via Edit Mode and then redeployed, they're lost
 - Update the code directly and commit to GitHub instead
 
 ## Post-Deployment
@@ -84,7 +84,7 @@ This project doesn't use any API keys or environment variables - you're good to 
 - Add to GitHub profile README
 
 ## Need Backend Persistence?
-If you want Admin Mode changes to persist across deployments, consider:
+If you want Edit Mode changes to persist across deployments, consider:
 - **Supabase** (free tier, easy setup)
 - **Firebase** (free tier, real-time)
 - **MongoDB Atlas** (free tier, document database)

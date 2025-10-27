@@ -167,12 +167,9 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handlePasswordSubmit()}
                 className="glass border-primary/30"
-                placeholder="Enter admin password"
+                placeholder="Enter password"
                 autoFocus
               />
-              <p className="text-xs text-muted-foreground">
-                Default password: <code className="text-primary">Refer me and i will tell you the Default Password</code>
-              </p>
             </div>
           </div>
 

@@ -168,12 +168,6 @@ export const About: React.FC = () => {
               </a>
             )}
           </div>
-          
-          {!content.email && !content.phone && !content.linkedin && !content.github && (
-            <p className="text-sm text-muted-foreground text-center py-4">
-              Configure contact information in admin mode (🔒)
-            </p>
-          )}
         </div>
 
         {/* System Info */}

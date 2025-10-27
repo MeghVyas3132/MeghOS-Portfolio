@@ -54,7 +54,7 @@ export const FileManager: React.FC = () => {
               <FolderOpen className="w-16 h-16 text-muted-foreground mx-auto" />
               <h3 className="text-xl font-semibold text-foreground">No Projects Yet</h3>
               <p className="text-sm text-muted-foreground">
-                Add your first project in admin mode (Alt+Shift+A) to showcase your work.
+                Projects will appear here once added.
               </p>
             </div>
           </div>
@@ -103,11 +103,6 @@ export const FileManager: React.FC = () => {
                       <Github className="w-4 h-4" />
                       View Code
                     </Button>
-                  )}
-                  {!project.demoUrl && !project.repoUrl && (
-                    <p className="text-xs text-muted-foreground italic">
-                      Add demo or repository links in admin mode to display buttons
-                    </p>
                   )}
                 </div>
               </div>
