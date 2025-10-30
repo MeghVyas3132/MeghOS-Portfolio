@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef } from 'react';
 
 interface Position {
   x: number;
@@ -22,33 +22,7 @@ export const useDraggable = (
   const dragStartPos = useRef({ x: 0, y: 0 });
   const elementStartPos = useRef({ x: 0, y: 0 });
   const isDraggingRef = useRef(false);
-  const rafRef = useRef<number | null>(null);
-  const pendingUpdate = useRef<Position | null>(null);
-
-  // Use RAF for smooth updates
-  useEffect(() => {
-    if (!isDraggingRef.current) return;
-
-    const animate = () => {
-      if (pendingUpdate.current) {
-        setPosition(pendingUpdate.current);
-        onPositionChange?.(pendingUpdate.current);
-        pendingUpdate.current = null;
-      }
-      
-      if (isDraggingRef.current) {
-        rafRef.current = requestAnimationFrame(animate);
-      }
-    };
-
-    rafRef.current = requestAnimationFrame(animate);
-
-    return () => {
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current);
-      }
-    };
-  }, [isDragging, onPositionChange]);
+  const lastUpdateTimeRef = useRef(0);
 
   const handleMouseDown = useCallback((e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('.no-drag')) {
@@ -66,6 +40,11 @@ export const useDraggable = (
   const handleMouseMove = useCallback((e: MouseEvent) => {
     if (!isDraggingRef.current) return;
 
+    const now = Date.now();
+    // Update at most every 16ms (60fps) to avoid excessive updates
+    if (now - lastUpdateTimeRef.current < 16) return;
+    lastUpdateTimeRef.current = now;
+
     const deltaX = e.clientX - dragStartPos.current.x;
     const deltaY = e.clientY - dragStartPos.current.y;
 
@@ -74,17 +53,15 @@ export const useDraggable = (
       y: Math.max(0, Math.min(window.innerHeight - 100, elementStartPos.current.y + deltaY)),
     };
 
-    // Store update for RAF to apply
-    pendingUpdate.current = newPosition;
-  }, []);
+    // Update immediately
+    setPosition(newPosition);
+    onPositionChange?.(newPosition);
+  }, [onPositionChange]);
 
   const handleMouseUp = useCallback(() => {
     setIsDragging(false);
     isDraggingRef.current = false;
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
+    lastUpdateTimeRef.current = 0;
   }, []);
 
   return {
