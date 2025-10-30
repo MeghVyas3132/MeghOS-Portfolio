@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { User, Briefcase, Code, Download, Mail, Phone, Linkedin, Github } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import photo2 from '@/assets/photo-2.jpg';
 
 const STORAGE_KEY = 'portfolio_content';
 
@@ -15,7 +16,7 @@ export const About: React.FC = () => {
     phone: '+91 88665 48854',
     linkedin: 'https://linkedin.com/in/MeghVyas',
     github: 'https://github.com/MeghVyas3132',
-    profilePhoto: 'photo-2.jpg',
+    profilePhoto: photo2,
   });
 
   useEffect(() => {

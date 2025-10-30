@@ -41,18 +41,27 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState('');
   const [content, setContent] = useState<PortfolioContent>({
-    name: 'DevOps Engineer',
-    role: 'Site Reliability Engineer',
-    about: 'Experienced DevOps/SRE professional specializing in container orchestration, CI/CD pipelines, and cloud infrastructure.',
-    skills: 'Docker, Kubernetes, Linux, Terraform, Ansible, Jenkins, GitLab CI, AWS, GCP, Prometheus, Grafana, Nginx, PostgreSQL, Redis',
+    name: 'Megh Vyas',
+    role: 'DevOps Engineer',
+    about: 'Aspiring DevOps Engineer with a solid foundation in cloud computing, automation, and CI/CD pipelines. Skilled in Linux, Git, and Docker with hands-on experience in cloud deployment and system management. Passionate about building scalable, reliable, and efficient workflows that bridge development and operations. Quick learner with strong problem-solving and collaboration skills, eager to contribute to modern DevOps initiatives.',
+    skills: 'Python, Node.js, JavaScript, React.js, AWS, GCP, Azure, Git, GitHub, GitLab, Docker, Nginx, Terraform, Multi-Cloud Orchestration, Load Balancing, Infrastructure as Code, CI/CD, Salesforce (Apex, LWC)',
     googleDrivePhotos: '',
     resumeUrl: '',
     profilePhoto: '',
-    email: '',
-    phone: '',
-    linkedin: '',
-    github: '',
-    projects: [],
+    email: 'megh.vyas@yahoo.com',
+    phone: '+91 88665 48854',
+    linkedin: 'https://linkedin.com/in/MeghVyas',
+    github: 'https://github.com/MeghVyas3132',
+    projects: [
+      {
+        id: '1',
+        title: 'Zyphron - Multi-Language Auto Deployment Platform',
+        description: 'A comprehensive deployment platform supporting multiple programming languages with automated CI/CD pipelines, Docker containerization, and cloud orchestration capabilities.',
+        demoUrl: '',
+        repoUrl: '',
+        tags: ['DevOps', 'CI/CD', 'Docker', 'Python', 'Node.js'],
+      },
+    ],
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
