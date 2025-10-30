@@ -1,128 +1,94 @@
-# MeghOS-Portfolio
+# MeghOS-Portfolio — Developer Handbook
 
-Welcome to MeghOS-Portfolio — a Linux-themed portfolio that showcases expertise in Linux, DevOps, and Site Reliability Engineering (SRE). Built with TypeScript and styled with subtle terminal-inspired visuals, this project presents projects, skills, and tooling in a polished, professional way.
+[Live site — meghvyas.netlify.app](https://meghvyas.netlify.app)  
+[![repo size](https://img.shields.io/github/repo-size/MeghVyas3132/MeghOS-Portfolio?color=blue)](https://github.com/MeghVyas3132/MeghOS-Portfolio)
 
-![MeghOS Banner](https://img.shields.io/badge/MeghOS-Portfolio-2b2b2b?style=for-the-badge&logo=linux&logoColor=white)
-
-[![License](https://img.shields.io/github/license/MeghVyas3132/MeghOS-Portfolio)](LICENSE)
-[![Top Language](https://img.shields.io/github/languages/top/MeghVyas3132/MeghOS-Portfolio)](https://github.com/MeghVyas3132/MeghOS-Portfolio)
-[![Repo Size](https://img.shields.io/github/repo-size/MeghVyas3132/MeghOS-Portfolio)](https://github.com/MeghVyas3132/MeghOS-Portfolio)
+Purpose: provide a compact, professional, developer-focused reference that explains architecture, conventions, local workflow, CI/CD, troubleshooting, and contribution guidelines. This document is intended for maintainers and contributors who need to understand how the project works and how to extend it safely.
 
 ---
 
-ASCII-style visual header
-```
-  __  __          _   _  ____   ____   ____  
- |  \/  |   /\   | \ | |/ __ \ / __ \ / __ \ 
- | \  / |  /  \  |  \| | |  | | |  | | |  | |
- | |\/| | / /\ \ | . ` | |  | | |  | | |  | |
- | |  | |/ ____ \| |\  | |__| | |__| | |__| |
- |_|  |_/_/    \_\_| \_|\____/ \____/ \____/ 
+## Quick overview
+MeghOS-Portfolio is a personal portfolio site designed to be lightweight, responsive, and easily deployable as static assets. The project is authored for maintainability and clarity rather than heavy feature complexity. Production is hosted on Netlify at the link above.
 
--- A terminal-first portfolio tailored for DevOps & SRE
-```
-
-Quick demo / hero screenshot (replace with actual screenshot in /assets)
-![Demo Screenshot](./assets/demo-screenshot.png)
+Primary goals for contributors:
+- Keep builds reproducible and small.
+- Follow linting/formatting rules for consistent reviews.
+- Ensure accessibility and performant asset delivery.
 
 ---
 
-Table of contents
-- About
-- Features
-- Tech stack
-- Getting started
-- Usage
-- Development
-- Contributing
-- License
-- Contact
+## Repository layout
 
-About
------
-MeghOS-Portfolio is designed to feel like a developer's workstation — minimal, keyboard-first, and information-dense. It's ideal for demonstrating:
-- System automation and scripting
-- Infrastructure-as-code examples
-- Monitoring and reliability workflows
-- Linux proficiency and troubleshooting notes
+(Adjust to reflect exact structure if different in repo)
 
-Features
---------
-- Terminal-inspired UI with choice of light/dark themes
-- Project gallery for DevOps and SRE-focused work
-- Resume / skills section emphasizing Linux, CI/CD, observability, and cloud tooling
-- Config snippets and downloadable dotfiles / playbooks
-- Responsive layout with keyboard navigation hints
+- /.github/                 — workflows, issue/PR templates
+- /public/                  — static assets served verbatim (images, icons, favicon)
+- /src/                     — source: components, pages, styles, utils
+  - /components/
+  - /pages/ or /views/
+  - /styles/ or /css/
+  - /utils/
+- /scripts/                 — ad-hoc helpers (deploy, codegen)
+- package.json
+- pnpm-lock.yaml / yarn.lock / package-lock.json
+- .eslintrc.js, .prettierrc, tsconfig.json (if TypeScript)
+- README.md
 
-Tech stack
-----------
-- Primary: TypeScript (frontend + tooling) — ~97% of repo
-- Styling: CSS
-- Other: Static assets and build utilities
+Principles:
+- Prefer small single-purpose components.
+- Keep assets under `/public` and keep them optimized (webp/AVIF where appropriate).
+- Use feature folders if a feature grows beyond a few files.
 
-Getting started
----------------
-Clone the repo and run locally:
+---
 
-```bash
-# clone
-git clone https://github.com/MeghVyas3132/MeghOS-Portfolio.git
-cd MeghOS-Portfolio
+## Local development setup
 
-# install
-npm install
+Prerequisites
+- Node.js LTS (18+ recommended)
+- npm (>=9) or pnpm/yarn (use the same package manager used by the repo)
+- git
 
-# run in dev mode
-npm run dev
+Quick start
+1. Clone
+   - git clone https://github.com/MeghVyas3132/MeghOS-Portfolio.git
+   - cd MeghOS-Portfolio
 
-# build
-npm run build
-npm run start
-```
+2. Install
+   - npm ci
+   - or pnpm install / yarn install (choose based on project's lockfile)
 
-Usage notes
------------
-- Keyboard-first navigation: use Tab/Arrow keys to move between sections.
-- Content is structured to be copy-paste friendly — configuration snippets are provided as ready-to-use code blocks.
-- Replace placeholder screenshots in /assets with your own for personalization.
+3. Environment
+   - cp .env.example .env.local
+   - Populate required values in `.env.local`.
 
-Development
------------
-- Code is TypeScript-first. Keep typings strict and prefer small, focused components.
-- Linting & formatting:
-```bash
-npm run lint
-npm run format
-```
-- Tests (if added):
-```bash
-npm test
-```
+4. Start dev server
+   - npm run dev
+   - Default dev URL typically http://localhost:3000 (check console for exact port).
 
-Accessibility & Performance
--------------------------
-- Aim for semantic HTML and good contrast for terminal vibes without sacrificing accessibility.
-- Optimize images in /assets; prefer SVG for icons and terminal ornaments.
+5. Build locally
+   - npm run build
+   - Preview production build (if supported): npm run preview
 
-Contributing
-------------
-Contributions are welcome — whether it's a fix, feature, or design polish. A few guidelines:
-- Open an issue describing the change first if it's non-trivial.
-- Keep PRs focused and include screenshots / GIFs for UI changes.
-- Follow the existing code style and ensure TypeScript types are updated when changing interfaces.
+---
 
-Suggested checklist for PRs:
-- [ ] Local build succeeds (npm run build)
-- [ ] Linting and formatting applied
-- [ ] New dependencies justified and minimal
-- [ ] Screenshots updated if UI changed
+## Coding standards & testing
 
-License
--------
-This project is provided under the MIT License. See the LICENSE file for details.
+- Use ESLint + Prettier — configure pre-commit hooks (husky) to run lint and formatting.
+- Prefer TypeScript for maintainability; if TS is used, keep `strict` mode on.
+- Tests:
+  - Unit: Jest + Testing Library (React)
+  - E2E: Playwright / Cypress (optional)
+- Strive for deterministic tests; mock network calls in unit tests.
 
-Contact
--------
-Megh Vyas — GitHub: [@MeghVyas3132](https://github.com/MeghVyas3132)
+Accessibility:
+- Use semantic HTML and ARIA where needed.
+- Automate a11y checks (axe) in CI for PRs.
 
+---
 
+## Contact
+
+Maintainer: Megh Vyas — @MeghVyas3132  
+Site: https://meghvyas.netlify.app
+
+---
