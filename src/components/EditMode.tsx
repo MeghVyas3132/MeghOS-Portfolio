@@ -46,7 +46,7 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
     about: 'Aspiring DevOps Engineer with a solid foundation in cloud computing, automation, and CI/CD pipelines. Skilled in Linux, Git, and Docker with hands-on experience in cloud deployment and system management. Passionate about building scalable, reliable, and efficient workflows that bridge development and operations. Quick learner with strong problem-solving and collaboration skills, eager to contribute to modern DevOps initiatives.',
     skills: 'Python, Node.js, JavaScript, React.js, AWS, GCP, Azure, Git, GitHub, GitLab, Docker, Nginx, Terraform, Multi-Cloud Orchestration, Load Balancing, Infrastructure as Code, CI/CD, Salesforce (Apex, LWC)',
     googleDrivePhotos: '',
-    resumeUrl: '',
+    resumeUrl: 'https://drive.google.com/file/d/1GaC68UdkH2hqWukWDGZMpvGSYO4y7jlV/view?usp=drivesdk',
     profilePhoto: '',
     email: 'megh.vyas@yahoo.com',
     phone: '+91 88665 48854',
@@ -56,10 +56,10 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
       {
         id: '1',
         title: 'Zyphron - Multi-Language Auto Deployment Platform',
-        description: 'A comprehensive deployment platform supporting multiple programming languages with automated CI/CD pipelines, Docker containerization, and cloud orchestration capabilities.',
+        description: 'Building a Full-stack DevOps Platform that automatically detects, builds, containerizes, and deploys applications across multiple languages (React, Node.js, Python, Java, PHP, Dotnet, etc) using Docker, Nginx, and Terraform. Implemented CI/CD automation, multi-cloud orchestration (AWS, GCP, Oracle Cloud), and caching to reduce build time by 70% and enable one-click deployments. Zyphron supports frontend, backend, and full-stack projects with features like monitoring, log checking, health checkup, and ELK alerts POST deployment.',
         demoUrl: '',
-        repoUrl: '',
-        tags: ['DevOps', 'CI/CD', 'Docker', 'Python', 'Node.js'],
+        repoUrl: 'https://github.com/MeghVyas3132/MeghOS-Portfolio',
+        tags: ['DevOps', 'CI/CD', 'Docker', 'Terraform', 'Nginx', 'Multi-Cloud', 'AWS', 'GCP', 'Python', 'Node.js', 'React', 'Java'],
       },
     ],
   });

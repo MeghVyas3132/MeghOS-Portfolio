@@ -11,10 +11,10 @@ export const About: React.FC = () => {
     role: 'DevOps Engineer',
     about: 'Aspiring DevOps Engineer with a solid foundation in cloud computing, automation, and CI/CD pipelines. Skilled in Linux, Git, and Docker with hands-on experience in cloud deployment and system management. Passionate about building scalable, reliable, and efficient workflows that bridge development and operations. Quick learner with strong problem-solving and collaboration skills, eager to contribute to modern DevOps initiatives.',
     skills: 'Python, Node.js, JavaScript, React.js, AWS, GCP, Azure, Git, GitHub, GitLab, Docker, Nginx, Terraform, Multi-Cloud Orchestration, Load Balancing, Infrastructure as Code, CI/CD, Salesforce (Apex, LWC)',
-    resumeUrl: '',
+    resumeUrl: 'https://drive.google.com/file/d/1GaC68UdkH2hqWukWDGZMpvGSYO4y7jlV/view?usp=drivesdk',
     email: 'megh.vyas@yahoo.com',
     phone: '+91 88665 48854',
-    linkedin: 'https://linkedin.com/in/MeghVyas',
+    linkedin: 'https://linkedin.com/in/Meghyyas',
     github: 'https://github.com/MeghVyas3132',
     profilePhoto: photo2,
   });

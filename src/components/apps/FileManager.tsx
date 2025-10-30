@@ -4,6 +4,17 @@ import { Button } from '@/components/ui/button';
 
 const STORAGE_KEY = 'portfolio_content';
 
+const DEFAULT_PROJECTS: Project[] = [
+  {
+    id: '1',
+    title: 'Zyphron - Multi-Language Auto Deployment Platform',
+    description: 'Building a Full-stack DevOps Platform that automatically detects, builds, containerizes, and deploys applications across multiple languages (React, Node.js, Python, Java, PHP, Dotnet, etc) using Docker, Nginx, and Terraform. Implemented CI/CD automation, multi-cloud orchestration (AWS, GCP, Oracle Cloud), and caching to reduce build time by 70% and enable one-click deployments. Zyphron supports frontend, backend, and full-stack projects with features like monitoring, log checking, health checkup, and ELK alerts POST deployment.',
+    demoUrl: '',
+    repoUrl: 'https://github.com/MeghVyas3132/MeghOS-Portfolio',
+    tags: ['DevOps', 'CI/CD', 'Docker', 'Terraform', 'Nginx', 'Multi-Cloud', 'AWS', 'GCP', 'Python', 'Node.js', 'React', 'Java'],
+  },
+];
+
 interface Project {
   id: string;
   title: string;
@@ -29,11 +40,14 @@ export const FileManager: React.FC = () => {
         const data = JSON.parse(stored);
         if (data.projects && Array.isArray(data.projects)) {
           setProjects(data.projects);
+          return;
         }
       } catch (error) {
         console.error('Failed to parse projects');
       }
     }
+    // If no projects in localStorage, show default projects
+    setProjects(DEFAULT_PROJECTS);
   };
 
   return (
