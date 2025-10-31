@@ -101,27 +101,34 @@ All colors MUST be HSL.
     -webkit-overflow-scrolling: touch;
     will-change: scroll-position;
     transform: translateZ(0);
+    overscroll-behavior: contain;
+    scroll-behavior: auto;
+    contain: layout style paint;
   }
 }
 
 @layer utilities {
   /* Glass Morphism - Optimized for Performance */
   .glass {
-    background: rgba(var(--glass-bg), 0.7);
-    backdrop-filter: blur(12px) saturate(180%);
-    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    background: rgba(var(--glass-bg), 0.8);
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
     border: 1px solid rgba(255, 255, 255, 0.1);
     transform: translateZ(0);
     will-change: transform;
+    backface-visibility: hidden;
+    contain: layout style;
   }
 
   .glass-strong {
-    background: rgba(var(--glass-bg), 0.85);
-    backdrop-filter: blur(16px) saturate(200%);
-    -webkit-backdrop-filter: blur(16px) saturate(200%);
+    background: rgba(var(--glass-bg), 0.9);
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.15);
     transform: translateZ(0);
     will-change: transform;
+    backface-visibility: hidden;
+    contain: layout style;
   }
 
   /* No blur during drag for better performance */
@@ -132,6 +139,7 @@ All colors MUST be HSL.
     border: 1px solid rgba(255, 255, 255, 0.2);
     transform: translateZ(0);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    contain: layout style;
   }
 
   /* Terminal Glow Effect */
@@ -215,7 +223,7 @@ All colors MUST be HSL.
     }
     100% {
       opacity: 0;
-      transform: scale3d(0.1, 0.1, 1) translate3d(0, 50vh, 0);
+      transform: scale3d(0.05, 0.05, 1) translate3d(0, 45vh, 0);
     }
   }
 
@@ -233,7 +241,7 @@ All colors MUST be HSL.
       box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
     }
     50% {
-      box-shadow: 0 0 40px rgba(0, 255, 65, 0.6);
+      box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
     }
   }
 
@@ -256,6 +264,21 @@ All colors MUST be HSL.
 
   .animate-float {
     animation: float 5s ease-in-out infinite;
+  }
+
+  /* Scroll Performance Optimizations */
+  .scroll-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  /* Prevent layout shift during scroll */
+  body {
+    scrollbar-gutter: stable;
+  }
+
+  /* Fast text rendering */
+  * {
+    text-rendering: optimizeLegibility;
   }
 }
 
