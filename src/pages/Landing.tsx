@@ -151,7 +151,7 @@ export const Landing: React.FC<LandingProps> = ({ onComplete }) => {
               stagger={0.03}
               textClassName="text-primary"
             >
-              Experience a unique desktop interface
+              Explore Desktop
             </ScrollFloat>
           </div>
         </div>
