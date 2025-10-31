@@ -71,7 +71,7 @@ export const EditMode: React.FC<EditModeProps> = ({ onClose }) => {
       },
       {
         id: '3',
-        title: 'MeghOS: Linux-Themed Interactive Portfolio',
+        title: 'MeghOS: Linux-Themed Interactive Portfolio(This Portfolio)',
         description: 'An interactive and immersive personal portfolio designed to look and feel like a Linux desktop environment. Creatively showcases proficiency in DevOps, Site Reliability Engineering (SRE), and software development. Simulates a complete desktop environment within the browser with terminal, file system, and applications. Demonstrates frontend development expertise while presenting projects, resume, and contact information in a unique, hands-on user experience. Fully responsive across different devices and screen sizes.',
         demoUrl: '',
         repoUrl: 'https://github.com/MeghVyas3132/MeghOS-Portfolio',
