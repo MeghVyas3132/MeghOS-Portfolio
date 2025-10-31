@@ -13,6 +13,30 @@ const DEFAULT_PROJECTS: Project[] = [
     repoUrl: 'https://github.com/MeghVyas3132/MeghOS-Portfolio',
     tags: ['DevOps', 'CI/CD', 'Docker', 'Terraform', 'Nginx', 'Multi-Cloud', 'AWS', 'GCP', 'Python', 'Node.js', 'React', 'Java'],
   },
+  {
+    id: '2',
+    title: 'HealthTrack: Enterprise-Grade SRE Monitoring Dashboard',
+    description: 'A comprehensive, enterprise-grade health monitoring and SRE (Site Reliability Engineering) dashboard designed for tracking the performance and availability of services, APIs, and microservices. Provides a single-pane-of-glass view with real-time, color-coded health indicators. Features real-time SRE metrics (P95/P99 latencies, Apdex scores, error rates, uptime), advanced monitoring with Prometheus and Grafana, event-driven architecture with Kafka, and a robust TypeScript frontend with Python 3.11 backend. The entire 9-service stack is containerized and deployable in minutes with a single command.',
+    demoUrl: '',
+    repoUrl: 'https://github.com/MeghVyas3132/Metrics-Health-Tracker',
+    tags: ['SRE', 'Monitoring', 'FastAPI', 'Next.js', 'TypeScript', 'Prometheus', 'Grafana', 'Kafka', 'Docker', 'PostgreSQL', 'Redis'],
+  },
+  {
+    id: '3',
+    title: 'MeghOS: Linux-Themed Interactive Portfolio',
+    description: 'An interactive and immersive personal portfolio designed to look and feel like a Linux desktop environment. Creatively showcases proficiency in DevOps, Site Reliability Engineering (SRE), and software development. Simulates a complete desktop environment within the browser with terminal, file system, and applications. Demonstrates frontend development expertise while presenting projects, resume, and contact information in a unique, hands-on user experience. Fully responsive across different devices and screen sizes.',
+    demoUrl: '',
+    repoUrl: 'https://github.com/MeghVyas3132/MeghOS-Portfolio',
+    tags: ['React', 'TypeScript', 'Tailwind CSS', 'Portfolio', 'Interactive UI', 'Frontend', 'DevOps'],
+  },
+  {
+    id: '4',
+    title: 'Web3 Migration Tool',
+    description: 'A command-line and scripting-based utility designed to facilitate the migration of applications or data from traditional Web2 infrastructure to a Web3 environment. Engineered for automation using shell scripts to orchestrate complex migration workflows. Features robust data management and transformation capabilities with PL/pgSQL, core logic built with Node.js for handling blockchain interactions, APIs, and data sources. Utilizes Pinata IPFS for decentralized storage and PostgreSQL for state management.',
+    demoUrl: '',
+    repoUrl: 'https://github.com/MeghVyas3132/Web3-Migration-Tool',
+    tags: ['Web3', 'Blockchain', 'Node.js', 'Shell', 'PostgreSQL', 'IPFS', 'Pinata', 'Migration', 'Automation'],
+  },
 ];
 
 interface Project {
