@@ -14,7 +14,7 @@ export const About: React.FC = () => {
     resumeUrl: 'https://drive.google.com/file/d/1GaC68UdkH2hqWukWDGZMpvGSYO4y7jlV/view?usp=drivesdk',
     email: 'megh.vyas@yahoo.com',
     phone: '+91 88665 48854',
-    linkedin: 'https://linkedin.com/in/Meghyyas',
+    linkedin: 'https://linkedin.com/in/meghvyas3132',
     github: 'https://github.com/MeghVyas3132',
     profilePhoto: photo2,
   });
