@@ -60,14 +60,14 @@ export const TopBar: React.FC<TopBarProps> = ({ onEditModeToggle, isEditMode }) 
   };
 
   return (
-    <div className="h-8 glass-strong border-b border-border flex items-center justify-between px-3 relative z-50">
-      <div className="flex items-center gap-4">
-        <span className="text-sm font-bold text-primary terminal-glow">Megh's Portfolio</span>
+    <div className="h-8 glass-strong border-b border-border flex items-center justify-between px-2 sm:px-3 relative z-50">
+      <div className="flex items-center gap-2 sm:gap-4">
+        <span className="text-xs sm:text-sm font-bold text-primary terminal-glow truncate">Megh's Portfolio</span>
       </div>
 
-      <div className="flex items-center gap-4">
-        <div className="text-xs text-muted-foreground">
-          {formattedDate} {formattedTime}
+      <div className="flex items-center gap-2 sm:gap-4">
+        <div className="text-[10px] sm:text-xs text-muted-foreground hidden xs:block sm:block">
+          <span className="hidden sm:inline">{formattedDate} </span>{formattedTime}
         </div>
         
         <button
@@ -76,9 +76,9 @@ export const TopBar: React.FC<TopBarProps> = ({ onEditModeToggle, isEditMode }) 
           title={isEditMode ? "Exit Edit Mode" : "Enter Edit Mode"}
         >
           {isEditMode ? (
-            <Unlock className="w-4 h-4 text-primary terminal-glow" />
+            <Unlock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-primary terminal-glow" />
           ) : (
-            <Lock className="w-4 h-4 text-muted-foreground hover:text-primary transition-colors" />
+            <Lock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-muted-foreground hover:text-primary transition-colors" />
           )}
         </button>
         

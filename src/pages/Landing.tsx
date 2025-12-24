@@ -149,7 +149,8 @@ export const Landing: React.FC<LandingProps> = ({ onComplete }) => {
               scrollStart='center bottom+=50%'
               scrollEnd='bottom bottom-=40%'
               stagger={0.03}
-              textClassName="text-primary"
+              textClassName="text-primary font-bold tracking-wide"
+              containerClassName="font-mono"
             >
               Explore Desktop
             </ScrollFloat>

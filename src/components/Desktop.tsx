@@ -84,7 +84,7 @@ const DesktopContent: React.FC = () => {
             minHeight={200}
             minWidth={200}
             scale={1}
-            scaleMobile={1}
+            scaleMobile={0.8}
             color={0xf97316}
             color2={0xea580c}
             backgroundColor={0x0a0a0a}

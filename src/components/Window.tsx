@@ -8,16 +8,26 @@ interface WindowProps {
   window: WindowState;
 }
 
-export const Window: React.FC<WindowProps> = ({ window }) => {
+// Check if mobile
+const isMobile = () => typeof window !== 'undefined' && window.innerWidth < 640;
+
+export const Window: React.FC<WindowProps> = ({ window: windowState }) => {
   const { closeWindow, minimizeWindow, maximizeWindow, focusWindow, updateWindowPosition } = useWindowManager();
   const [isClosing, setIsClosing] = useState(false);
   const [isMinimizing, setIsMinimizing] = useState(false);
   const [isMaximizing, setIsMaximizing] = useState(false);
+  const [mobile, setMobile] = useState(isMobile());
   
   const { position, isDragging, handleMouseDown, handleMouseMove, handleMouseUp } = useDraggable(
-    window.position,
-    (newPos) => updateWindowPosition(window.id, newPos)
+    windowState.position,
+    (newPos) => updateWindowPosition(windowState.id, newPos)
   );
+
+  useEffect(() => {
+    const checkMobile = () => setMobile(isMobile());
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (isDragging) {
@@ -33,29 +43,32 @@ export const Window: React.FC<WindowProps> = ({ window }) => {
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
-      closeWindow(window.id);
-    }, 150); // Match faster animation duration
+      closeWindow(windowState.id);
+    }, 150);
   };
 
   const handleMinimize = () => {
     setIsMinimizing(true);
     setTimeout(() => {
-      minimizeWindow(window.id);
+      minimizeWindow(windowState.id);
       setIsMinimizing(false);
-    }, 200); // Match faster animation duration
+    }, 200);
   };
 
   const handleMaximize = () => {
     setIsMaximizing(true);
-    maximizeWindow(window.id);
+    maximizeWindow(windowState.id);
     setTimeout(() => {
       setIsMaximizing(false);
-    }, 150); // Match faster animation duration
+    }, 150);
   };
 
-  if (window.isMinimized) return null;
+  if (windowState.isMinimized) return null;
 
-  const Component = window.component;
+  const Component = windowState.component;
+  
+  // On mobile, always show fullscreen
+  const isFullscreen = mobile || windowState.isMaximized;
 
   return (
     <div
@@ -68,45 +81,45 @@ export const Window: React.FC<WindowProps> = ({ window }) => {
         ${!isClosing && !isMinimizing && !isMaximizing ? 'animate-window-open' : ''}
       `}
       style={{
-        left: window.isMaximized ? 0 : position.x,
-        top: window.isMaximized ? 0 : position.y,
-        width: window.isMaximized ? '100vw' : window.size.width,
-        height: window.isMaximized ? 'calc(100vh - 80px)' : window.size.height,
-        zIndex: window.zIndex,
+        left: isFullscreen ? 0 : position.x,
+        top: isFullscreen ? 0 : position.y,
+        width: isFullscreen ? '100vw' : windowState.size.width,
+        height: isFullscreen ? 'calc(100vh - 80px)' : windowState.size.height,
+        zIndex: windowState.zIndex,
         transform: 'translate3d(0, 0, 0)',
         backfaceVisibility: 'hidden',
         WebkitBackfaceVisibility: 'hidden',
       }}
-      onMouseDown={() => focusWindow(window.id)}
+      onMouseDown={() => focusWindow(windowState.id)}
     >
       {/* Title Bar */}
       <div
-        className="h-10 bg-muted/50 border-b border-border flex items-center justify-between px-4 cursor-grab active:cursor-grabbing select-none"
-        onMouseDown={handleMouseDown}
+        className="h-10 bg-muted/50 border-b border-border flex items-center justify-between px-3 sm:px-4 cursor-grab active:cursor-grabbing select-none"
+        onMouseDown={mobile ? undefined : handleMouseDown}
       >
-        <span className="text-sm font-medium text-foreground">{window.title}</span>
-        <div className="flex gap-2 no-drag">
+        <span className="text-xs sm:text-sm font-medium text-foreground truncate max-w-[50%]">{windowState.title}</span>
+        <div className="flex gap-1.5 sm:gap-2 no-drag">
           <button
             onClick={handleMinimize}
-            className="w-6 h-6 rounded-full bg-yellow-500 hover:bg-yellow-600 flex items-center justify-center transition-transform duration-100 hover:scale-110 active:scale-95"
+            className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-yellow-500 hover:bg-yellow-600 flex items-center justify-center transition-transform duration-100 hover:scale-110 active:scale-95 group"
           >
-            <Minimize className="w-3 h-3 text-yellow-900 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <Minimize className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-yellow-900 opacity-0 group-hover:opacity-100 transition-opacity" />
           </button>
           <button
             onClick={handleMaximize}
-            className="w-6 h-6 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-transform duration-100 hover:scale-110 active:scale-95"
+            className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-green-500 hover:bg-green-600 flex items-center justify-center transition-transform duration-100 hover:scale-110 active:scale-95 group hidden sm:flex"
           >
-            {window.isMaximized ? (
-              <Maximize2 className="w-3 h-3 text-green-900 opacity-0 group-hover:opacity-100 transition-opacity" />
+            {windowState.isMaximized ? (
+              <Maximize2 className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-green-900 opacity-0 group-hover:opacity-100 transition-opacity" />
             ) : (
-              <Maximize className="w-3 h-3 text-green-900 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Maximize className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-green-900 opacity-0 group-hover:opacity-100 transition-opacity" />
             )}
           </button>
           <button
             onClick={handleClose}
-            className="w-6 h-6 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-transform duration-100 hover:scale-110 active:scale-95 group"
+            className="w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-red-500 hover:bg-red-600 flex items-center justify-center transition-transform duration-100 hover:scale-110 active:scale-95 group"
           >
-            <X className="w-3 h-3 text-red-900 opacity-0 group-hover:opacity-100 transition-opacity" />
+            <X className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-red-900 opacity-0 group-hover:opacity-100 transition-opacity" />
           </button>
         </div>
       </div>
