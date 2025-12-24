@@ -72,7 +72,7 @@ const VantaDots: React.FC<VantaDotsProps> = ({
   showLines = true,
 }) => {
   const vantaRef = useRef<HTMLDivElement>(null);
-  const [vantaEffect, setVantaEffect] = useState<VantaEffect | null>(null);
+  const effectRef = useRef<VantaEffect | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
@@ -114,11 +114,12 @@ const VantaDots: React.FC<VantaDotsProps> = ({
       showLines,
     });
 
-    setVantaEffect(effect);
+    effectRef.current = effect;
 
     return () => {
-      if (effect) {
-        effect.destroy();
+      if (effectRef.current) {
+        effectRef.current.destroy();
+        effectRef.current = null;
       }
     };
   }, [
