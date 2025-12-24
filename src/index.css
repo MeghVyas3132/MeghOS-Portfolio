@@ -8,48 +8,48 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Linux OS Dark Theme */
-    --background: 220 13% 6%;
+    /* Monochrome Dark Theme with Subtle Orange Accents */
+    --background: 0 0% 4%;
     --foreground: 0 0% 95%;
 
-    --card: 220 13% 8%;
+    --card: 0 0% 7%;
     --card-foreground: 0 0% 95%;
 
-    --popover: 220 13% 10%;
+    --popover: 0 0% 9%;
     --popover-foreground: 0 0% 95%;
 
-    /* Terminal Green Primary */
-    --primary: 142 76% 48%;
-    --primary-foreground: 220 13% 6%;
-    --primary-glow: 142 76% 65%;
+    /* Subtle Orange Primary */
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 4%;
+    --primary-glow: 24 95% 60%;
 
     /* Glass Effects */
-    --glass-bg: 220 13% 12%;
+    --glass-bg: 0 0% 10%;
     --glass-border: 0 0% 100%;
     --glass-opacity: 0.1;
 
-    --secondary: 217 33% 17%;
+    --secondary: 0 0% 14%;
     --secondary-foreground: 0 0% 95%;
 
-    --muted: 220 13% 15%;
-    --muted-foreground: 0 0% 65%;
+    --muted: 0 0% 12%;
+    --muted-foreground: 0 0% 60%;
 
-    /* Blue Accent */
-    --accent: 199 89% 48%;
+    /* Orange Accent - Very Subtle */
+    --accent: 24 80% 50%;
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 18%;
-    --input: 220 13% 15%;
-    --ring: 142 76% 48%;
+    --border: 0 0% 15%;
+    --input: 0 0% 12%;
+    --ring: 24 95% 53%;
 
     --radius: 0.5rem;
 
     /* Window Shadows */
     --shadow-window: 0 20px 60px -15px rgba(0, 0, 0, 0.8);
-    --shadow-glow: 0 0 40px rgb(0, 255, 64);
+    --shadow-glow: 0 0 40px rgba(249, 115, 22, 0.3);
 
     /* Animations */
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -108,6 +108,32 @@ All colors MUST be HSL.
 }
 
 @layer utilities {
+  /* Subtle Hover Animations */
+  .hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .hover-scale {
+    transition: transform 0.15s ease;
+  }
+  
+  .hover-scale:hover {
+    transform: scale(1.02);
+  }
+
+  .hover-glow {
+    transition: box-shadow 0.2s ease;
+  }
+  
+  .hover-glow:hover {
+    box-shadow: 0 0 20px rgba(249, 115, 22, 0.15);
+  }
+
   /* Glass Morphism - Optimized for Performance */
   .glass {
     background: rgba(var(--glass-bg), 0.8);
@@ -118,17 +144,36 @@ All colors MUST be HSL.
     will-change: transform;
     backface-visibility: hidden;
     contain: layout style;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .glass:hover {
+    border-color: rgba(249, 115, 22, 0.15);
   }
 
   .glass-strong {
-    background: rgba(var(--glass-bg), 0.9);
-    backdrop-filter: blur(10px) saturate(180%);
-    -webkit-backdrop-filter: blur(10px) saturate(180%);
+    background: rgba(var(--glass-bg), 0.4);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.15);
     transform: translateZ(0);
     will-change: transform;
     backface-visibility: hidden;
     contain: layout style;
+  }
+
+  /* Dock Glass - Liquid/Frosted effect */
+  .dock-glass {
+    background: rgba(30, 30, 30, 0.3);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transform: translateZ(0);
+    will-change: transform;
+    backface-visibility: hidden;
   }
 
   /* No blur during drag for better performance */
@@ -144,9 +189,9 @@ All colors MUST be HSL.
 
   /* Terminal Glow Effect */
   .terminal-glow {
-    text-shadow: 0 0 10px rgba(0, 255, 65, 0.7),
-                 0 0 20px rgba(0, 255, 65, 0.4),
-                 0 0 30px rgba(0, 255, 65, 0.2);
+    text-shadow: 0 0 10px rgba(249, 115, 22, 0.5),
+                 0 0 20px rgba(249, 115, 22, 0.3),
+                 0 0 30px rgba(249, 115, 22, 0.15);
   }
 
   /* Smooth Animations */
@@ -238,10 +283,10 @@ All colors MUST be HSL.
 
   @keyframes pulseGlow {
     0%, 100% {
-      box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+      box-shadow: 0 0 20px rgba(249, 115, 22, 0.2);
     }
     50% {
-      box-shadow: 0 0 30px rgba(0, 255, 65, 0.5);
+      box-shadow: 0 0 30px rgba(249, 115, 22, 0.3);
     }
   }
 

@@ -95,7 +95,7 @@ export const Landing: React.FC<LandingProps> = ({ onComplete }) => {
         className="absolute inset-0 will-change-transform"
         style={{ 
           opacity: 1 - (scrollProgress / 100) * 0.3,
-          background: 'radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%)',
+          background: 'radial-gradient(circle at 50% 50%, rgba(249, 115, 22, 0.08) 0%, transparent 50%)',
           transition: 'opacity 0.3s ease-out'
         }}
       />
@@ -136,8 +136,8 @@ export const Landing: React.FC<LandingProps> = ({ onComplete }) => {
               width={true}
               weight={true}
               italic={true}
-              textColor="#10b981"
-              strokeColor="#ff0000"
+              textColor="#f97316"
+              strokeColor="#ea580c"
               minFontSize={36}
             />
           </div>
@@ -180,7 +180,7 @@ export const Landing: React.FC<LandingProps> = ({ onComplete }) => {
             className="h-full bg-gradient-to-r from-primary to-accent will-change-transform"
             style={{
               width: `${scrollProgress}%`,
-              boxShadow: scrollProgress > 0 ? '0 0 20px rgba(16, 185, 129, 0.6)' : 'none',
+              boxShadow: scrollProgress > 0 ? '0 0 20px rgba(249, 115, 22, 0.5)' : 'none',
               transition: 'width 0.3s ease-out, box-shadow 0.3s ease-out'
             }}
           />

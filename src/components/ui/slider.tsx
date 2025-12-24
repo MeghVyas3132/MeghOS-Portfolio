@@ -16,19 +16,18 @@ const Slider = React.forwardRef<
       <SliderPrimitive.Range className="absolute h-full bg-primary" />
     </SliderPrimitive.Track>
     <SliderPrimitive.Thumb 
-      className="block h-4 w-8 rounded-full border-0 transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer" 
+      className="block h-4 w-8 rounded-full border-0 transition-all focus-visible:outline-none disabled:pointer-events-none disabled:opacity-50 cursor-pointer bg-primary hover:scale-110" 
       style={{
-        backgroundColor: 'hsl(142, 76%, 48%)',
-        boxShadow: '0 0 20px rgba(16, 185, 129, 0.8), 0 0 40px rgba(16, 185, 129, 0.5)',
+        boxShadow: '0 0 15px rgba(249, 115, 22, 0.6), 0 0 30px rgba(249, 115, 22, 0.3)',
       }}
       onMouseEnter={(e) => {
         if (!props.disabled) {
-          e.currentTarget.style.boxShadow = '0 0 30px rgba(16, 185, 129, 1), 0 0 60px rgba(16, 185, 129, 0.7)';
+          e.currentTarget.style.boxShadow = '0 0 20px rgba(249, 115, 22, 0.8), 0 0 40px rgba(249, 115, 22, 0.5)';
         }
       }}
       onMouseLeave={(e) => {
         if (!props.disabled) {
-          e.currentTarget.style.boxShadow = '0 0 20px rgba(16, 185, 129, 0.8), 0 0 40px rgba(16, 185, 129, 0.5)';
+          e.currentTarget.style.boxShadow = '0 0 15px rgba(249, 115, 22, 0.6), 0 0 30px rgba(249, 115, 22, 0.3)';
         }
       }}
     />

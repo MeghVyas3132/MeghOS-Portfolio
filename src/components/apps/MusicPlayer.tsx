@@ -11,41 +11,80 @@ interface Song {
   duration: string;
 }
 
+/**
+ * Music Player with Streaming URLs
+ * These are royalty-free tracks that can be streamed directly
+ */
 const DEMO_SONGS: Song[] = [
   {
     id: 1,
-    title: 'Calm Coding',
-    artist: 'Lo-Fi Beats',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-    duration: '3:45',
+    title: 'Chill Vibes',
+    artist: 'Chillhop Music',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3',
+    duration: '0:00',
   },
   {
     id: 2,
-    title: 'Deep Focus',
-    artist: 'Study Music',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-    duration: '4:12',
+    title: 'Ethereal',
+    artist: 'Kevin MacLeod',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Calming/Kevin_MacLeod_-_Meditation_Impromptu.mp3',
+    duration: '0:00',
   },
   {
     id: 3,
-    title: 'Terminal Vibes',
-    artist: 'DevOps Mix',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-    duration: '3:58',
+    title: 'Lo-Fi Dreams',
+    artist: 'Blue Dot Sessions',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Blue_Dot_Sessions/Vernonia/Blue_Dot_Sessions_-_Rain_and_Shine.mp3',
+    duration: '0:00',
   },
   {
     id: 4,
-    title: 'Container Orchestra',
-    artist: 'Docker Beats',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-    duration: '4:30',
+    title: 'Ambient Flow',
+    artist: 'Scott Buckley',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Scott_Buckley/Scott_Buckley_-_Filaments/Scott_Buckley_-_Filaments.mp3',
+    duration: '0:00',
   },
   {
     id: 5,
-    title: 'Cloud Nine',
-    artist: 'SRE Sessions',
-    url: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-    duration: '3:22',
+    title: 'Night Drive',
+    artist: 'Lobo Loco',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Lobo_Loco/Loco_Lounge/Lobo_Loco_-_05_-_Thai_Sunrise_ID_1082.mp3',
+    duration: '0:00',
+  },
+  {
+    id: 6,
+    title: 'Peaceful Morning',
+    artist: 'Chad Crouch',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Algorithms.mp3',
+    duration: '0:00',
+  },
+  {
+    id: 7,
+    title: 'Floating',
+    artist: 'Blue Dot Sessions',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Blue_Dot_Sessions/Bitters/Blue_Dot_Sessions_-_Pangea.mp3',
+    duration: '0:00',
+  },
+  {
+    id: 8,
+    title: 'Serenity',
+    artist: 'Kevin MacLeod',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Calming/Kevin_MacLeod_-_Peaceful_Desolation.mp3',
+    duration: '0:00',
+  },
+  {
+    id: 9,
+    title: 'Deep Focus',
+    artist: 'Scott Buckley',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Scott_Buckley/Scott_Buckley_-_Legions/Scott_Buckley_-_Legions.mp3',
+    duration: '0:00',
+  },
+  {
+    id: 10,
+    title: 'Sunset Waves',
+    artist: 'Lobo Loco',
+    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Lobo_Loco/Loco_Lounge/Lobo_Loco_-_04_-_Sitar_Sunrise_ID_1080.mp3',
+    duration: '0:00',
   },
 ];
 
@@ -54,22 +93,38 @@ export const MusicPlayer: React.FC = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState([70]);
   const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState('0:00');
+  const [duration, setDuration] = useState('0:00');
   const audioRef = useRef<HTMLAudioElement>(null);
+
+  const formatTime = (seconds: number): string => {
+    if (isNaN(seconds)) return '0:00';
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
 
     const updateProgress = () => {
-      const progress = (audio.currentTime / audio.duration) * 100;
-      setProgress(progress);
+      const progressPercent = (audio.currentTime / audio.duration) * 100;
+      setProgress(isNaN(progressPercent) ? 0 : progressPercent);
+      setCurrentTime(formatTime(audio.currentTime));
+    };
+
+    const handleLoadedMetadata = () => {
+      setDuration(formatTime(audio.duration));
     };
 
     audio.addEventListener('timeupdate', updateProgress);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
     audio.addEventListener('ended', handleNext);
 
     return () => {
       audio.removeEventListener('timeupdate', updateProgress);
+      audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
       audio.removeEventListener('ended', handleNext);
     };
   }, [currentSong]);
@@ -85,7 +140,10 @@ export const MusicPlayer: React.FC = () => {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        audioRef.current.play();
+        audioRef.current.play().catch(() => {
+          // Handle autoplay restrictions
+          console.log('Playback failed - user interaction required');
+        });
       }
       setIsPlaying(!isPlaying);
     }
@@ -135,8 +193,8 @@ export const MusicPlayer: React.FC = () => {
             }}
           />
           <div className="flex justify-between text-xs text-muted-foreground">
-            <span>0:00</span>
-            <span>{DEMO_SONGS[currentSong].duration}</span>
+            <span>{currentTime}</span>
+            <span>{duration}</span>
           </div>
         </div>
 
@@ -145,7 +203,7 @@ export const MusicPlayer: React.FC = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="h-12 w-12"
+            className="h-12 w-12 hover:scale-110 transition-transform"
             onClick={handlePrevious}
           >
             <SkipBack className="h-6 w-6" />
@@ -153,7 +211,7 @@ export const MusicPlayer: React.FC = () => {
           
           <Button
             size="icon"
-            className="h-16 w-16 bg-primary hover:bg-primary/90 terminal-glow"
+            className="h-16 w-16 bg-primary hover:bg-primary/90 hover:scale-105 transition-all"
             onClick={handlePlayPause}
           >
             {isPlaying ? (
@@ -166,7 +224,7 @@ export const MusicPlayer: React.FC = () => {
           <Button
             variant="ghost"
             size="icon"
-            className="h-12 w-12"
+            className="h-12 w-12 hover:scale-110 transition-transform"
             onClick={handleNext}
           >
             <SkipForward className="h-6 w-6" />
@@ -185,16 +243,16 @@ export const MusicPlayer: React.FC = () => {
         </div>
       </div>
 
-      {/* Playlist */}
-      <div className="border-t border-border bg-muted/30 p-4">
-        <h3 className="text-sm font-semibold mb-3 text-muted-foreground">PLAYLIST</h3>
+      {/* Playlist - Scrollable */}
+      <div className="border-t border-border bg-muted/30 p-4 max-h-[200px] overflow-y-auto">
+        <h3 className="text-sm font-semibold mb-3 text-muted-foreground sticky top-0 bg-muted/30 py-1">PLAYLIST ({DEMO_SONGS.length} songs)</h3>
         <div className="space-y-1">
           {DEMO_SONGS.map((song, index) => (
             <button
               key={song.id}
               onClick={() => handleSongSelect(index)}
               className={`
-                w-full text-left p-2 rounded-lg transition-all
+                w-full text-left p-2 rounded-lg transition-all duration-200 hover:scale-[1.01]
                 ${currentSong === index
                   ? 'bg-primary/20 text-primary border border-primary/50'
                   : 'hover:bg-muted/50 text-foreground'
@@ -202,11 +260,20 @@ export const MusicPlayer: React.FC = () => {
               `}
             >
               <div className="flex justify-between items-center">
-                <div className="flex-1">
-                  <p className="text-sm font-medium">{song.title}</p>
-                  <p className="text-xs text-muted-foreground">{song.artist}</p>
+                <div className="flex items-center gap-3 flex-1">
+                  <span className="text-xs text-muted-foreground w-5">{index + 1}</span>
+                  <div>
+                    <p className="text-sm font-medium">{song.title}</p>
+                    <p className="text-xs text-muted-foreground">{song.artist}</p>
+                  </div>
                 </div>
-                <span className="text-xs text-muted-foreground">{song.duration}</span>
+                {currentSong === index && isPlaying && (
+                  <div className="flex gap-0.5 items-end h-4">
+                    <div className="w-1 bg-primary animate-pulse" style={{ height: '60%' }} />
+                    <div className="w-1 bg-primary animate-pulse" style={{ height: '100%', animationDelay: '0.2s' }} />
+                    <div className="w-1 bg-primary animate-pulse" style={{ height: '40%', animationDelay: '0.4s' }} />
+                  </div>
+                )}
               </div>
             </button>
           ))}

@@ -14,7 +14,7 @@ import { MusicPlayer } from './apps/MusicPlayer';
 import { Settings as SettingsApp } from './apps/Settings';
 import { EditMode } from './EditMode';
 import { AppInfo } from '@/types/Desktop';
-import Prism from './Prism';
+import VantaDots from './VantaDots';
 
 const APPS: AppInfo[] = [
   {
@@ -75,27 +75,30 @@ const DesktopContent: React.FC = () => {
   return (
     <>
       <div className="h-screen w-full overflow-hidden relative">
-        {/* Prism Background */}
-        <div className="absolute inset-0 opacity-30 will-change-transform">
-          <Prism
-            animationType="rotate"
-            timeScale={0.4}
-            height={2.5}
-            baseWidth={5.1}
-            scale={3.6}
-            hueShift={0.2}
-            colorFrequency={1}
-            noise={0}
-            glow={0.6}
-            transparent={true}
+        {/* Vanta Dots Background */}
+        <div className="absolute inset-0 z-0">
+          <VantaDots
+            mouseControls={true}
+            touchControls={true}
+            gyroControls={false}
+            minHeight={200}
+            minWidth={200}
+            scale={1}
+            scaleMobile={1}
+            color={0xf97316}
+            color2={0xea580c}
+            backgroundColor={0x0a0a0a}
+            size={2.5}
+            spacing={30}
+            showLines={false}
           />
         </div>
         
-        {/* Overlay for better readability */}
-        <div className="absolute inset-0 bg-background/70 backdrop-blur-sm will-change-transform" />
+        {/* Subtle overlay for readability */}
+        <div className="absolute inset-0 bg-black/30 z-[1]" />
         
         {/* Content */}
-        <div className="relative z-10 h-full will-change-transform">
+        <div className="relative z-[2] h-full">
           <TopBar 
             onEditModeToggle={() => setIsEditMode(!isEditMode)} 
             isEditMode={isEditMode}

@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - NODE_ENV=development
+      - BROWSER=none
+    stdin_open: true
+    tty: true
+    command: ["pnpm", "dev", "--host", "0.0.0.0", "--no-open"]
