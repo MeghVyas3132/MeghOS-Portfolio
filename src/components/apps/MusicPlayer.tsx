@@ -10,11 +10,13 @@ interface Song {
   genre: string;
   duration: string;
   url: string;
+  cover: string;
 }
 
 /**
  * Music Player - Personal Playlist
  * Add your MP3 files to /public/music/ folder
+ * Add album cover JPGs to /public/music/covers/ folder
  */
 const DEMO_SONGS: Song[] = [
   {
@@ -25,6 +27,7 @@ const DEMO_SONGS: Song[] = [
     genre: 'Bollywood',
     duration: '5:10',
     url: '/music/a-r-rahman-tere-bina-lyrical-song-aishwarya-rai-abhishek-bachchan-guru-gulzar-128-ytshorts.savetube.me.mp3',
+    cover: '/music/covers/tere-bina.jpg',
   },
   {
     id: 2,
@@ -34,6 +37,7 @@ const DEMO_SONGS: Song[] = [
     genre: 'Folk',
     duration: '4:07',
     url: '/music/rang-bhini-radha-folk-box-feat-aditya-gadhavi-kavi-shri-daan-alagari-128-ytshorts.savetube.me.mp3',
+    cover: '/music/covers/rang-bhini-radha.jpg',
   },
   {
     id: 3,
@@ -43,6 +47,7 @@ const DEMO_SONGS: Song[] = [
     genre: 'Hip-Hop/Rap',
     duration: '2:33',
     url: '/music/central-cee-x-sexyy-red-guilt-trippin-music-video-128-ytshorts.savetube.me.mp3',
+    cover: '/music/covers/guilt-trippin.jpg',
   },
   {
     id: 4,
@@ -52,6 +57,7 @@ const DEMO_SONGS: Song[] = [
     genre: 'Hip-Hop/Rap',
     duration: '4:53',
     url: '/music/j-cole-no-role-modelz-explicit-128-ytshorts.savetube.me.mp3',
+    cover: '/music/covers/no-role-modelz.jpg',
   },
   {
     id: 5,
@@ -61,6 +67,7 @@ const DEMO_SONGS: Song[] = [
     genre: 'Singer/Songwriter',
     duration: '3:32',
     url: '/music/matthew-perryman-jones-living-in-the-shadows-official-audio-128-ytshorts.savetube.me.mp3',
+    cover: '/music/covers/living-in-the-shadows.jpg',
   },
 ];
 
@@ -168,14 +175,26 @@ export const MusicPlayer: React.FC = () => {
       {/* Main Player Content */}
       <div className="flex-1 flex flex-col items-center justify-center p-6">
         
-        {/* Album Art */}
+        {/* Album Art / Cover GIF */}
         <div className="relative group mb-6">
-          <div className={`w-40 h-40 sm:w-48 sm:h-48 rounded-2xl bg-gradient-to-br from-orange-500/30 via-orange-500/10 to-transparent backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-2xl transition-transform duration-500 ${isPlaying ? 'scale-105' : ''}`}>
-            <Music className={`w-16 h-16 sm:w-20 sm:h-20 text-orange-500/80 transition-all duration-500 ${isPlaying ? 'animate-pulse' : ''}`} />
+          <div className={`w-40 h-40 sm:w-48 sm:h-48 rounded-2xl overflow-hidden border border-white/20 shadow-2xl transition-transform duration-500 ${isPlaying ? 'scale-105' : ''}`}>
+            <img 
+              src={DEMO_SONGS[currentSong].cover} 
+              alt={DEMO_SONGS[currentSong].title}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                // Fallback to music icon if GIF not found
+                e.currentTarget.style.display = 'none';
+                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+              }}
+            />
+            <div className="hidden w-full h-full bg-gradient-to-br from-orange-500/30 via-orange-500/10 to-transparent flex items-center justify-center">
+              <Music className="w-16 h-16 sm:w-20 sm:h-20 text-orange-500/80" />
+            </div>
           </div>
           {/* Glow effect when playing */}
           {isPlaying && (
-            <div className="absolute inset-0 rounded-2xl bg-orange-500/20 blur-2xl -z-10 animate-pulse" />
+            <div className="absolute inset-0 rounded-2xl bg-orange-500/30 blur-2xl -z-10 animate-pulse" />
           )}
         </div>
 
@@ -315,7 +334,7 @@ export const MusicPlayer: React.FC = () => {
                   `}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 rounded-lg overflow-hidden bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center shrink-0">
                       {currentSong === index && isPlaying ? (
                         <div className="flex gap-0.5 items-end h-4">
                           <div className="w-0.5 rounded-full animate-bounce" style={{ height: '40%', animationDelay: '0ms', backgroundColor: 'hsl(24, 95%, 53%)' }} />
@@ -324,7 +343,14 @@ export const MusicPlayer: React.FC = () => {
                           <div className="w-0.5 rounded-full animate-bounce" style={{ height: '80%', animationDelay: '450ms', backgroundColor: 'hsl(24, 95%, 53%)' }} />
                         </div>
                       ) : (
-                        <Music className="w-4 h-4 text-white/40" />
+                        <img 
+                          src={song.cover} 
+                          alt={song.title}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
