@@ -41,11 +41,11 @@ export const Landing: React.FC<LandingProps> = ({ onComplete }) => {
       if (completedRef.current) return;
       
       if (e.deltaY > 0) {
-        // Scrolling down - faster increment
-        progressRef.current = Math.min(progressRef.current + 8, 100);
+        // Scrolling down - much faster increment (one scroll = done)
+        progressRef.current = Math.min(progressRef.current + 35, 100);
       } else {
         // Scrolling up
-        progressRef.current = Math.max(progressRef.current - 8, 0);
+        progressRef.current = Math.max(progressRef.current - 35, 0);
       }
     };
 
@@ -63,13 +63,14 @@ export const Landing: React.FC<LandingProps> = ({ onComplete }) => {
       const touchY = e.touches[0].clientY;
       const diff = touchStartY - touchY;
       
-      if (Math.abs(diff) > 2) {
+      // Much more sensitive - one swipe should complete
+      if (Math.abs(diff) > 5) {
         if (diff > 0) {
-          // Scrolling down
-          progressRef.current = Math.min(progressRef.current + 3, 100);
+          // Scrolling down - faster on mobile
+          progressRef.current = Math.min(progressRef.current + 25, 100);
         } else {
           // Scrolling up
-          progressRef.current = Math.max(progressRef.current - 3, 0);
+          progressRef.current = Math.max(progressRef.current - 25, 0);
         }
         touchStartY = touchY;
       }

@@ -19,7 +19,10 @@ export const SettingsProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   useEffect(() => {
     localStorage.setItem('screen_brightness', brightness[0].toString());
-    document.documentElement.style.filter = `brightness(${brightness[0]}%)`;
+    // Map 0-100 slider value to 15-100 actual brightness
+    // This ensures screen is always visible (minimum 15% brightness)
+    const actualBrightness = 15 + (brightness[0] * 0.85);
+    document.documentElement.style.filter = `brightness(${actualBrightness}%)`;
     
     return () => {
       document.documentElement.style.filter = '';

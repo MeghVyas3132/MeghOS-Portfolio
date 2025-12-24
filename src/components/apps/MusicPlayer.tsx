@@ -1,90 +1,66 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Volume2, Music } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Music, Shuffle, Repeat, List } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 
 interface Song {
   id: number;
   title: string;
   artist: string;
-  url: string;
+  album: string;
+  genre: string;
   duration: string;
+  url: string;
 }
 
 /**
- * Music Player with Streaming URLs
- * These are royalty-free tracks that can be streamed directly
+ * Music Player - Personal Playlist
+ * Add your MP3 files to /public/music/ folder
  */
 const DEMO_SONGS: Song[] = [
   {
     id: 1,
-    title: 'Chill Vibes',
-    artist: 'Chillhop Music',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Shipping_Lanes.mp3',
-    duration: '0:00',
+    title: 'Tere Bina',
+    artist: 'A.R. Rahman, Chinmayi Sripada',
+    album: 'Guru (Original Motion Picture Soundtrack)',
+    genre: 'Bollywood',
+    duration: '5:10',
+    url: '/music/tere-bina.mp3',
   },
   {
     id: 2,
-    title: 'Ethereal',
-    artist: 'Kevin MacLeod',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Calming/Kevin_MacLeod_-_Meditation_Impromptu.mp3',
-    duration: '0:00',
+    title: 'Rang Bhini Radha',
+    artist: 'Aditya Gadhvi',
+    album: 'Rang Bhini Radha - Single',
+    genre: 'Folk',
+    duration: '4:07',
+    url: '/music/rang-bhini-radha.mp3',
   },
   {
     id: 3,
-    title: 'Lo-Fi Dreams',
-    artist: 'Blue Dot Sessions',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Blue_Dot_Sessions/Vernonia/Blue_Dot_Sessions_-_Rain_and_Shine.mp3',
-    duration: '0:00',
+    title: 'GUILT TRIPPIN',
+    artist: 'Central Cee & Sexyy Red',
+    album: 'GUILT TRIPPIN - Single',
+    genre: 'Hip-Hop/Rap',
+    duration: '2:33',
+    url: '/music/guilt-trippin.mp3',
   },
   {
     id: 4,
-    title: 'Ambient Flow',
-    artist: 'Scott Buckley',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Scott_Buckley/Scott_Buckley_-_Filaments/Scott_Buckley_-_Filaments.mp3',
-    duration: '0:00',
+    title: 'No Role Modelz',
+    artist: 'J. Cole',
+    album: '2014 Forest Hills Drive',
+    genre: 'Hip-Hop/Rap',
+    duration: '4:53',
+    url: '/music/no-role-modelz.mp3',
   },
   {
     id: 5,
-    title: 'Night Drive',
-    artist: 'Lobo Loco',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Lobo_Loco/Loco_Lounge/Lobo_Loco_-_05_-_Thai_Sunrise_ID_1082.mp3',
-    duration: '0:00',
-  },
-  {
-    id: 6,
-    title: 'Peaceful Morning',
-    artist: 'Chad Crouch',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Chad_Crouch/Arps/Chad_Crouch_-_Algorithms.mp3',
-    duration: '0:00',
-  },
-  {
-    id: 7,
-    title: 'Floating',
-    artist: 'Blue Dot Sessions',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Blue_Dot_Sessions/Bitters/Blue_Dot_Sessions_-_Pangea.mp3',
-    duration: '0:00',
-  },
-  {
-    id: 8,
-    title: 'Serenity',
-    artist: 'Kevin MacLeod',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Kevin_MacLeod/Calming/Kevin_MacLeod_-_Peaceful_Desolation.mp3',
-    duration: '0:00',
-  },
-  {
-    id: 9,
-    title: 'Deep Focus',
-    artist: 'Scott Buckley',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Scott_Buckley/Scott_Buckley_-_Legions/Scott_Buckley_-_Legions.mp3',
-    duration: '0:00',
-  },
-  {
-    id: 10,
-    title: 'Sunset Waves',
-    artist: 'Lobo Loco',
-    url: 'https://files.freemusicarchive.org/storage-freemusicarchive-org/music/ccCommunity/Lobo_Loco/Loco_Lounge/Lobo_Loco_-_04_-_Sitar_Sunrise_ID_1080.mp3',
-    duration: '0:00',
+    title: 'Living in the Shadows',
+    artist: 'Matthew Perryman Jones',
+    album: 'Living in the Shadows - Single',
+    genre: 'Singer/Songwriter',
+    duration: '3:32',
+    url: '/music/living-in-the-shadows.mp3',
   },
 ];
 
@@ -95,6 +71,10 @@ export const MusicPlayer: React.FC = () => {
   const [progress, setProgress] = useState(0);
   const [currentTime, setCurrentTime] = useState('0:00');
   const [duration, setDuration] = useState('0:00');
+  const [showPlaylist, setShowPlaylist] = useState(true);
+  const [isMuted, setIsMuted] = useState(false);
+  const [shuffle, setShuffle] = useState(false);
+  const [repeat, setRepeat] = useState(false);
   const audioRef = useRef<HTMLAudioElement>(null);
 
   const formatTime = (seconds: number): string => {
@@ -118,22 +98,31 @@ export const MusicPlayer: React.FC = () => {
       setDuration(formatTime(audio.duration));
     };
 
+    const handleEnded = () => {
+      if (repeat) {
+        audio.currentTime = 0;
+        audio.play();
+      } else {
+        handleNext();
+      }
+    };
+
     audio.addEventListener('timeupdate', updateProgress);
     audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-    audio.addEventListener('ended', handleNext);
+    audio.addEventListener('ended', handleEnded);
 
     return () => {
       audio.removeEventListener('timeupdate', updateProgress);
       audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-      audio.removeEventListener('ended', handleNext);
+      audio.removeEventListener('ended', handleEnded);
     };
-  }, [currentSong]);
+  }, [currentSong, repeat]);
 
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = volume[0] / 100;
+      audioRef.current.volume = isMuted ? 0 : volume[0] / 100;
     }
-  }, [volume]);
+  }, [volume, isMuted]);
 
   const handlePlayPause = () => {
     if (audioRef.current) {
@@ -141,7 +130,6 @@ export const MusicPlayer: React.FC = () => {
         audioRef.current.pause();
       } else {
         audioRef.current.play().catch(() => {
-          // Handle autoplay restrictions
           console.log('Playback failed - user interaction required');
         });
       }
@@ -150,7 +138,12 @@ export const MusicPlayer: React.FC = () => {
   };
 
   const handleNext = () => {
-    setCurrentSong((prev) => (prev + 1) % DEMO_SONGS.length);
+    if (shuffle) {
+      const nextIndex = Math.floor(Math.random() * DEMO_SONGS.length);
+      setCurrentSong(nextIndex);
+    } else {
+      setCurrentSong((prev) => (prev + 1) % DEMO_SONGS.length);
+    }
     setIsPlaying(false);
   };
 
@@ -162,123 +155,181 @@ export const MusicPlayer: React.FC = () => {
   const handleSongSelect = (index: number) => {
     setCurrentSong(index);
     setIsPlaying(false);
+    setTimeout(() => {
+      audioRef.current?.play();
+      setIsPlaying(true);
+    }, 100);
   };
 
   return (
-    <div className="h-full flex flex-col bg-gradient-to-br from-background via-background to-muted/20">
+    <div className="h-full flex flex-col bg-transparent backdrop-blur-xl">
       <audio ref={audioRef} src={DEMO_SONGS[currentSong].url} />
       
-      {/* Main Player */}
-      <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-8">
-        <div className="w-48 h-48 bg-gradient-to-br from-primary/20 to-primary/5 rounded-2xl glass-strong flex items-center justify-center animate-pulse">
-          <Music className="w-24 h-24 text-primary terminal-glow" />
-        </div>
+      {/* Main Content */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Now Playing - Left Side */}
+        <div className={`flex-1 flex flex-col items-center justify-center p-6 ${showPlaylist ? 'border-r border-white/10' : ''}`}>
+          
+          {/* Album Art */}
+          <div className="relative group mb-6">
+            <div className={`w-40 h-40 sm:w-48 sm:h-48 rounded-2xl bg-gradient-to-br from-primary/30 via-primary/10 to-transparent backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-2xl transition-transform duration-500 ${isPlaying ? 'scale-105' : ''}`}>
+              <Music className={`w-16 h-16 sm:w-20 sm:h-20 text-primary/80 transition-all duration-500 ${isPlaying ? 'animate-pulse' : ''}`} />
+            </div>
+            {/* Glow effect when playing */}
+            {isPlaying && (
+              <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-2xl -z-10 animate-pulse" />
+            )}
+          </div>
 
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold text-primary terminal-glow">{DEMO_SONGS[currentSong].title}</h2>
-          <p className="text-lg text-muted-foreground">{DEMO_SONGS[currentSong].artist}</p>
-        </div>
+          {/* Song Info */}
+          <div className="text-center space-y-1 mb-6 max-w-full px-4">
+            <h2 className="text-xl sm:text-2xl font-semibold text-white truncate">{DEMO_SONGS[currentSong].title}</h2>
+            <p className="text-sm sm:text-base text-white/60 truncate">{DEMO_SONGS[currentSong].artist}</p>
+            <p className="text-xs text-white/40 truncate">{DEMO_SONGS[currentSong].album}</p>
+          </div>
 
-        {/* Progress Bar */}
-        <div className="w-full max-w-md space-y-2">
-          <Slider
-            value={[progress]}
-            max={100}
-            step={1}
-            className="cursor-pointer"
-            onValueChange={(value) => {
-              if (audioRef.current) {
-                audioRef.current.currentTime = (value[0] / 100) * audioRef.current.duration;
-              }
-            }}
-          />
-          <div className="flex justify-between text-xs text-muted-foreground">
-            <span>{currentTime}</span>
-            <span>{duration}</span>
+          {/* Progress Bar */}
+          <div className="w-full max-w-xs space-y-2 mb-6 px-4">
+            <Slider
+              value={[progress]}
+              max={100}
+              step={0.1}
+              className="cursor-pointer"
+              onValueChange={(value) => {
+                if (audioRef.current && audioRef.current.duration) {
+                  audioRef.current.currentTime = (value[0] / 100) * audioRef.current.duration;
+                }
+              }}
+            />
+            <div className="flex justify-between text-[11px] text-white/50 font-medium">
+              <span>{currentTime}</span>
+              <span>{duration}</span>
+            </div>
+          </div>
+
+          {/* Main Controls */}
+          <div className="flex items-center justify-center gap-3 sm:gap-6 mb-6">
+            <button
+              onClick={() => setShuffle(!shuffle)}
+              className={`p-2 rounded-full transition-all hover:bg-white/10 ${shuffle ? 'text-primary' : 'text-white/50 hover:text-white'}`}
+            >
+              <Shuffle className="h-4 w-4" />
+            </button>
+            
+            <button
+              className="p-3 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all active:scale-90"
+              onClick={handlePrevious}
+            >
+              <SkipBack className="h-5 w-5 fill-current" />
+            </button>
+            
+            <button
+              className="p-4 rounded-full bg-white text-black hover:scale-105 transition-all active:scale-95 shadow-lg"
+              onClick={handlePlayPause}
+            >
+              {isPlaying ? (
+                <Pause className="h-6 w-6 fill-current" />
+              ) : (
+                <Play className="h-6 w-6 fill-current ml-0.5" />
+              )}
+            </button>
+            
+            <button
+              className="p-3 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all active:scale-90"
+              onClick={handleNext}
+            >
+              <SkipForward className="h-5 w-5 fill-current" />
+            </button>
+
+            <button
+              onClick={() => setRepeat(!repeat)}
+              className={`p-2 rounded-full transition-all hover:bg-white/10 ${repeat ? 'text-primary' : 'text-white/50 hover:text-white'}`}
+            >
+              <Repeat className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Volume Control */}
+          <div className="flex items-center gap-3 w-36">
+            <button 
+              onClick={() => setIsMuted(!isMuted)}
+              className="text-white/50 hover:text-white transition-colors"
+            >
+              {isMuted || volume[0] === 0 ? (
+                <VolumeX className="h-4 w-4" />
+              ) : (
+                <Volume2 className="h-4 w-4" />
+              )}
+            </button>
+            <Slider
+              value={isMuted ? [0] : volume}
+              max={100}
+              step={1}
+              onValueChange={(v) => {
+                setVolume(v);
+                setIsMuted(false);
+              }}
+              className="flex-1"
+            />
           </div>
         </div>
 
-        {/* Controls */}
-        <div className="flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-12 w-12 hover:scale-110 transition-transform"
-            onClick={handlePrevious}
-          >
-            <SkipBack className="h-6 w-6" />
-          </Button>
-          
-          <Button
-            size="icon"
-            className="h-16 w-16 bg-primary hover:bg-primary/90 hover:scale-105 transition-all"
-            onClick={handlePlayPause}
-          >
-            {isPlaying ? (
-              <Pause className="h-8 w-8" />
-            ) : (
-              <Play className="h-8 w-8 ml-1" />
-            )}
-          </Button>
-          
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-12 w-12 hover:scale-110 transition-transform"
-            onClick={handleNext}
-          >
-            <SkipForward className="h-6 w-6" />
-          </Button>
-        </div>
-
-        {/* Volume Control */}
-        <div className="flex items-center gap-2 w-48">
-          <Volume2 className="h-4 w-4 text-muted-foreground" />
-          <Slider
-            value={volume}
-            max={100}
-            step={1}
-            onValueChange={setVolume}
-          />
-        </div>
+        {/* Playlist - Right Side */}
+        {showPlaylist && (
+          <div className="w-64 sm:w-72 flex flex-col bg-black/20">
+            <div className="p-4 border-b border-white/10">
+              <h3 className="text-sm font-semibold text-white/80">Up Next</h3>
+              <p className="text-xs text-white/40">{DEMO_SONGS.length} songs</p>
+            </div>
+            
+            <div className="flex-1 overflow-y-auto">
+              {DEMO_SONGS.map((song, index) => (
+                <button
+                  key={song.id}
+                  onClick={() => handleSongSelect(index)}
+                  className={`
+                    w-full text-left px-4 py-3 transition-all border-b border-white/5
+                    ${currentSong === index
+                      ? 'bg-white/10'
+                      : 'hover:bg-white/5'
+                    }
+                  `}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center shrink-0">
+                      {currentSong === index && isPlaying ? (
+                        <div className="flex gap-0.5 items-end h-4">
+                          <div className="w-0.5 bg-primary rounded-full animate-bounce" style={{ height: '40%', animationDelay: '0ms' }} />
+                          <div className="w-0.5 bg-primary rounded-full animate-bounce" style={{ height: '70%', animationDelay: '150ms' }} />
+                          <div className="w-0.5 bg-primary rounded-full animate-bounce" style={{ height: '50%', animationDelay: '300ms' }} />
+                          <div className="w-0.5 bg-primary rounded-full animate-bounce" style={{ height: '80%', animationDelay: '450ms' }} />
+                        </div>
+                      ) : (
+                        <Music className="w-4 h-4 text-white/40" />
+                      )}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className={`text-sm font-medium truncate ${currentSong === index ? 'text-primary' : 'text-white/90'}`}>
+                        {song.title}
+                      </p>
+                      <p className="text-xs text-white/40 truncate">{song.artist}</p>
+                    </div>
+                    <span className="text-xs text-white/30 shrink-0">{song.duration}</span>
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      {/* Playlist - Scrollable */}
-      <div className="border-t border-border bg-muted/30 p-4 max-h-[200px] overflow-y-auto">
-        <h3 className="text-sm font-semibold mb-3 text-muted-foreground sticky top-0 bg-muted/30 py-1">PLAYLIST ({DEMO_SONGS.length} songs)</h3>
-        <div className="space-y-1">
-          {DEMO_SONGS.map((song, index) => (
-            <button
-              key={song.id}
-              onClick={() => handleSongSelect(index)}
-              className={`
-                w-full text-left p-2 rounded-lg transition-all duration-200 hover:scale-[1.01]
-                ${currentSong === index
-                  ? 'bg-primary/20 text-primary border border-primary/50'
-                  : 'hover:bg-muted/50 text-foreground'
-                }
-              `}
-            >
-              <div className="flex justify-between items-center">
-                <div className="flex items-center gap-3 flex-1">
-                  <span className="text-xs text-muted-foreground w-5">{index + 1}</span>
-                  <div>
-                    <p className="text-sm font-medium">{song.title}</p>
-                    <p className="text-xs text-muted-foreground">{song.artist}</p>
-                  </div>
-                </div>
-                {currentSong === index && isPlaying && (
-                  <div className="flex gap-0.5 items-end h-4">
-                    <div className="w-1 bg-primary animate-pulse" style={{ height: '60%' }} />
-                    <div className="w-1 bg-primary animate-pulse" style={{ height: '100%', animationDelay: '0.2s' }} />
-                    <div className="w-1 bg-primary animate-pulse" style={{ height: '40%', animationDelay: '0.4s' }} />
-                  </div>
-                )}
-              </div>
-            </button>
-          ))}
-        </div>
-      </div>
+      {/* Toggle Playlist Button */}
+      <button
+        onClick={() => setShowPlaylist(!showPlaylist)}
+        className={`absolute top-3 right-3 p-2 rounded-lg transition-all hover:bg-white/10 ${showPlaylist ? 'text-primary' : 'text-white/50'}`}
+      >
+        <List className="h-4 w-4" />
+      </button>
     </div>
   );
 };
