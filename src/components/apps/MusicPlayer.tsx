@@ -162,127 +162,146 @@ export const MusicPlayer: React.FC = () => {
   };
 
   return (
-    <div className="h-full flex flex-col bg-transparent backdrop-blur-xl">
+    <div className="h-full flex flex-col bg-transparent backdrop-blur-xl relative overflow-hidden">
       <audio ref={audioRef} src={DEMO_SONGS[currentSong].url} />
       
-      {/* Main Content */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Now Playing - Left Side */}
-        <div className={`flex-1 flex flex-col items-center justify-center p-6 ${showPlaylist ? 'border-r border-white/10' : ''}`}>
-          
-          {/* Album Art */}
-          <div className="relative group mb-6">
-            <div className={`w-40 h-40 sm:w-48 sm:h-48 rounded-2xl bg-gradient-to-br from-primary/30 via-primary/10 to-transparent backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-2xl transition-transform duration-500 ${isPlaying ? 'scale-105' : ''}`}>
-              <Music className={`w-16 h-16 sm:w-20 sm:h-20 text-primary/80 transition-all duration-500 ${isPlaying ? 'animate-pulse' : ''}`} />
-            </div>
-            {/* Glow effect when playing */}
-            {isPlaying && (
-              <div className="absolute inset-0 rounded-2xl bg-primary/20 blur-2xl -z-10 animate-pulse" />
-            )}
+      {/* Main Player Content */}
+      <div className="flex-1 flex flex-col items-center justify-center p-6">
+        
+        {/* Album Art */}
+        <div className="relative group mb-6">
+          <div className={`w-40 h-40 sm:w-48 sm:h-48 rounded-2xl bg-gradient-to-br from-orange-500/30 via-orange-500/10 to-transparent backdrop-blur-sm border border-white/10 flex items-center justify-center shadow-2xl transition-transform duration-500 ${isPlaying ? 'scale-105' : ''}`}>
+            <Music className={`w-16 h-16 sm:w-20 sm:h-20 text-orange-500/80 transition-all duration-500 ${isPlaying ? 'animate-pulse' : ''}`} />
           </div>
+          {/* Glow effect when playing */}
+          {isPlaying && (
+            <div className="absolute inset-0 rounded-2xl bg-orange-500/20 blur-2xl -z-10 animate-pulse" />
+          )}
+        </div>
 
-          {/* Song Info */}
-          <div className="text-center space-y-1 mb-6 max-w-full px-4">
-            <h2 className="text-xl sm:text-2xl font-semibold text-white truncate">{DEMO_SONGS[currentSong].title}</h2>
-            <p className="text-sm sm:text-base text-white/60 truncate">{DEMO_SONGS[currentSong].artist}</p>
-            <p className="text-xs text-white/40 truncate">{DEMO_SONGS[currentSong].album}</p>
-          </div>
+        {/* Song Info */}
+        <div className="text-center space-y-1 mb-6 max-w-full px-4">
+          <h2 className="text-xl sm:text-2xl font-semibold text-white truncate">{DEMO_SONGS[currentSong].title}</h2>
+          <p className="text-sm sm:text-base text-white/60 truncate">{DEMO_SONGS[currentSong].artist}</p>
+          <p className="text-xs text-white/40 truncate">{DEMO_SONGS[currentSong].album}</p>
+        </div>
 
-          {/* Progress Bar */}
-          <div className="w-full max-w-xs space-y-2 mb-6 px-4">
-            <Slider
-              value={[progress]}
-              max={100}
-              step={0.1}
-              className="cursor-pointer"
-              onValueChange={(value) => {
-                if (audioRef.current && audioRef.current.duration) {
-                  audioRef.current.currentTime = (value[0] / 100) * audioRef.current.duration;
-                }
-              }}
-            />
-            <div className="flex justify-between text-[11px] text-white/50 font-medium">
-              <span>{currentTime}</span>
-              <span>{duration}</span>
-            </div>
-          </div>
-
-          {/* Main Controls */}
-          <div className="flex items-center justify-center gap-3 sm:gap-6 mb-6">
-            <button
-              onClick={() => setShuffle(!shuffle)}
-              className={`p-2 rounded-full transition-all hover:bg-white/10 ${shuffle ? 'text-orange-500' : 'text-white/50 hover:text-white'}`}
-            >
-              <Shuffle className="h-4 w-4" />
-            </button>
-            
-            <button
-              className="p-3 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all active:scale-90"
-              onClick={handlePrevious}
-            >
-              <SkipBack className="h-5 w-5 fill-current" />
-            </button>
-            
-            <button
-              className="p-4 rounded-full bg-white text-black hover:scale-105 transition-all active:scale-95 shadow-lg"
-              onClick={handlePlayPause}
-            >
-              {isPlaying ? (
-                <Pause className="h-6 w-6 fill-current" />
-              ) : (
-                <Play className="h-6 w-6 fill-current ml-0.5" />
-              )}
-            </button>
-            
-            <button
-              className="p-3 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all active:scale-90"
-              onClick={handleNext}
-            >
-              <SkipForward className="h-5 w-5 fill-current" />
-            </button>
-
-            <button
-              onClick={() => setRepeat(!repeat)}
-              className={`p-2 rounded-full transition-all hover:bg-white/10 ${repeat ? 'text-orange-500' : 'text-white/50 hover:text-white'}`}
-            >
-              <Repeat className="h-4 w-4" />
-            </button>
-          </div>
-
-          {/* Volume Control */}
-          <div className="flex items-center gap-3 w-36">
-            <button 
-              onClick={() => setIsMuted(!isMuted)}
-              className="text-white/50 hover:text-white transition-colors"
-            >
-              {isMuted || volume[0] === 0 ? (
-                <VolumeX className="h-4 w-4" />
-              ) : (
-                <Volume2 className="h-4 w-4" />
-              )}
-            </button>
-            <Slider
-              value={isMuted ? [0] : volume}
-              max={100}
-              step={1}
-              onValueChange={(v) => {
-                setVolume(v);
-                setIsMuted(false);
-              }}
-              className="flex-1"
-            />
+        {/* Progress Bar */}
+        <div className="w-full max-w-xs space-y-2 mb-6 px-4">
+          <Slider
+            value={[progress]}
+            max={100}
+            step={0.1}
+            className="cursor-pointer"
+            onValueChange={(value) => {
+              if (audioRef.current && audioRef.current.duration) {
+                audioRef.current.currentTime = (value[0] / 100) * audioRef.current.duration;
+              }
+            }}
+          />
+          <div className="flex justify-between text-[11px] text-white/50 font-medium">
+            <span>{currentTime}</span>
+            <span>{duration}</span>
           </div>
         </div>
 
-        {/* Playlist - Right Side */}
-        {showPlaylist && (
-          <div className="w-72 sm:w-80 flex flex-col bg-black/30 backdrop-blur-sm">
+        {/* Main Controls */}
+        <div className="flex items-center justify-center gap-3 sm:gap-6 mb-6">
+          <button
+            onClick={() => setShuffle(!shuffle)}
+            className={`p-2 rounded-full transition-all hover:bg-white/10 ${shuffle ? 'text-orange-500' : 'text-white/50 hover:text-white'}`}
+          >
+            <Shuffle className="h-4 w-4" />
+          </button>
+          
+          <button
+            className="p-3 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all active:scale-90"
+            onClick={handlePrevious}
+          >
+            <SkipBack className="h-5 w-5 fill-current" />
+          </button>
+          
+          <button
+            className="p-4 rounded-full bg-white text-black hover:scale-105 transition-all active:scale-95 shadow-lg"
+            onClick={handlePlayPause}
+          >
+            {isPlaying ? (
+              <Pause className="h-6 w-6 fill-current" />
+            ) : (
+              <Play className="h-6 w-6 fill-current ml-0.5" />
+            )}
+          </button>
+          
+          <button
+            className="p-3 rounded-full text-white/80 hover:text-white hover:bg-white/10 transition-all active:scale-90"
+            onClick={handleNext}
+          >
+            <SkipForward className="h-5 w-5 fill-current" />
+          </button>
+
+          <button
+            onClick={() => setRepeat(!repeat)}
+            className={`p-2 rounded-full transition-all hover:bg-white/10 ${repeat ? 'text-orange-500' : 'text-white/50 hover:text-white'}`}
+          >
+            <Repeat className="h-4 w-4" />
+          </button>
+        </div>
+
+        {/* Volume Control */}
+        <div className="flex items-center gap-3 w-36">
+          <button 
+            onClick={() => setIsMuted(!isMuted)}
+            className="text-white/50 hover:text-white transition-colors"
+          >
+            {isMuted || volume[0] === 0 ? (
+              <VolumeX className="h-4 w-4" />
+            ) : (
+              <Volume2 className="h-4 w-4" />
+            )}
+          </button>
+          <Slider
+            value={isMuted ? [0] : volume}
+            max={100}
+            step={1}
+            onValueChange={(v) => {
+              setVolume(v);
+              setIsMuted(false);
+            }}
+            className="flex-1"
+          />
+        </div>
+      </div>
+
+      {/* Toggle Playlist Button */}
+      <button
+        onClick={() => setShowPlaylist(!showPlaylist)}
+        className={`absolute top-3 right-3 p-2 rounded-lg transition-all hover:bg-white/10 z-50 ${showPlaylist ? 'text-orange-500' : 'text-white/50'}`}
+      >
+        <List className="h-4 w-4" />
+      </button>
+
+      {/* Playlist Overlay */}
+      {showPlaylist && (
+        <div 
+          className="absolute inset-0 z-40 flex items-center justify-center p-4"
+          onClick={() => setShowPlaylist(false)}
+        >
+          <div 
+            className="w-full max-w-sm h-full max-h-[90%] flex flex-col rounded-2xl border border-white/20 shadow-2xl overflow-hidden"
+            style={{ 
+              backgroundColor: 'rgba(0, 0, 0, 0.85)',
+              backdropFilter: 'blur(20px)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Playlist Header */}
             <div className="p-4 border-b border-white/10 shrink-0">
-              <h3 className="text-sm font-semibold text-white/80">Up Next</h3>
-              <p className="text-xs text-white/40">{DEMO_SONGS.length} songs</p>
+              <h3 className="text-base font-semibold text-white">Up Next</h3>
+              <p className="text-xs text-white/50">{DEMO_SONGS.length} songs</p>
             </div>
             
-            <div className="flex-1 overflow-y-auto min-h-0">
+            {/* Playlist Items */}
+            <div className="flex-1 overflow-y-auto">
               {DEMO_SONGS.map((song, index) => (
                 <button
                   key={song.id}
@@ -309,27 +328,19 @@ export const MusicPlayer: React.FC = () => {
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium truncate ${currentSong === index ? 'text-orange-500' : 'text-white/90'}`}>
+                      <p className={`text-sm font-medium truncate ${currentSong === index ? 'text-orange-500' : 'text-white'}`}>
                         {song.title}
                       </p>
-                      <p className="text-xs text-white/40 truncate">{song.artist}</p>
+                      <p className="text-xs text-white/50 truncate">{song.artist}</p>
                     </div>
-                    <span className="text-xs text-white/30 shrink-0">{song.duration}</span>
+                    <span className="text-xs text-white/40 shrink-0">{song.duration}</span>
                   </div>
                 </button>
               ))}
             </div>
           </div>
-        )}
-      </div>
-
-      {/* Toggle Playlist Button */}
-      <button
-        onClick={() => setShowPlaylist(!showPlaylist)}
-        className={`absolute top-3 right-3 p-2 rounded-lg transition-all hover:bg-white/10 ${showPlaylist ? 'text-orange-500' : 'text-white/50'}`}
-      >
-        <List className="h-4 w-4" />
-      </button>
+        </div>
+      )}
     </div>
   );
 };
