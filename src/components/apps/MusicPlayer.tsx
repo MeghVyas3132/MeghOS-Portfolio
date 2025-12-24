@@ -211,7 +211,7 @@ export const MusicPlayer: React.FC = () => {
           <div className="flex items-center justify-center gap-3 sm:gap-6 mb-6">
             <button
               onClick={() => setShuffle(!shuffle)}
-              className={`p-2 rounded-full transition-all hover:bg-white/10 ${shuffle ? 'text-primary' : 'text-white/50 hover:text-white'}`}
+              className={`p-2 rounded-full transition-all hover:bg-white/10 ${shuffle ? 'text-orange-500' : 'text-white/50 hover:text-white'}`}
             >
               <Shuffle className="h-4 w-4" />
             </button>
@@ -243,7 +243,7 @@ export const MusicPlayer: React.FC = () => {
 
             <button
               onClick={() => setRepeat(!repeat)}
-              className={`p-2 rounded-full transition-all hover:bg-white/10 ${repeat ? 'text-primary' : 'text-white/50 hover:text-white'}`}
+              className={`p-2 rounded-full transition-all hover:bg-white/10 ${repeat ? 'text-orange-500' : 'text-white/50 hover:text-white'}`}
             >
               <Repeat className="h-4 w-4" />
             </button>
@@ -276,13 +276,13 @@ export const MusicPlayer: React.FC = () => {
 
         {/* Playlist - Right Side */}
         {showPlaylist && (
-          <div className="w-64 sm:w-72 flex flex-col bg-black/20">
-            <div className="p-4 border-b border-white/10">
+          <div className="w-72 sm:w-80 flex flex-col bg-black/30 backdrop-blur-sm">
+            <div className="p-4 border-b border-white/10 shrink-0">
               <h3 className="text-sm font-semibold text-white/80">Up Next</h3>
               <p className="text-xs text-white/40">{DEMO_SONGS.length} songs</p>
             </div>
             
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto min-h-0">
               {DEMO_SONGS.map((song, index) => (
                 <button
                   key={song.id}
@@ -299,17 +299,17 @@ export const MusicPlayer: React.FC = () => {
                     <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-white/10 to-white/5 flex items-center justify-center shrink-0">
                       {currentSong === index && isPlaying ? (
                         <div className="flex gap-0.5 items-end h-4">
-                          <div className="w-0.5 bg-primary rounded-full animate-bounce" style={{ height: '40%', animationDelay: '0ms' }} />
-                          <div className="w-0.5 bg-primary rounded-full animate-bounce" style={{ height: '70%', animationDelay: '150ms' }} />
-                          <div className="w-0.5 bg-primary rounded-full animate-bounce" style={{ height: '50%', animationDelay: '300ms' }} />
-                          <div className="w-0.5 bg-primary rounded-full animate-bounce" style={{ height: '80%', animationDelay: '450ms' }} />
+                          <div className="w-0.5 rounded-full animate-bounce" style={{ height: '40%', animationDelay: '0ms', backgroundColor: 'hsl(24, 95%, 53%)' }} />
+                          <div className="w-0.5 rounded-full animate-bounce" style={{ height: '70%', animationDelay: '150ms', backgroundColor: 'hsl(24, 95%, 53%)' }} />
+                          <div className="w-0.5 rounded-full animate-bounce" style={{ height: '50%', animationDelay: '300ms', backgroundColor: 'hsl(24, 95%, 53%)' }} />
+                          <div className="w-0.5 rounded-full animate-bounce" style={{ height: '80%', animationDelay: '450ms', backgroundColor: 'hsl(24, 95%, 53%)' }} />
                         </div>
                       ) : (
                         <Music className="w-4 h-4 text-white/40" />
                       )}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className={`text-sm font-medium truncate ${currentSong === index ? 'text-primary' : 'text-white/90'}`}>
+                      <p className={`text-sm font-medium truncate ${currentSong === index ? 'text-orange-500' : 'text-white/90'}`}>
                         {song.title}
                       </p>
                       <p className="text-xs text-white/40 truncate">{song.artist}</p>
@@ -326,7 +326,7 @@ export const MusicPlayer: React.FC = () => {
       {/* Toggle Playlist Button */}
       <button
         onClick={() => setShowPlaylist(!showPlaylist)}
-        className={`absolute top-3 right-3 p-2 rounded-lg transition-all hover:bg-white/10 ${showPlaylist ? 'text-primary' : 'text-white/50'}`}
+        className={`absolute top-3 right-3 p-2 rounded-lg transition-all hover:bg-white/10 ${showPlaylist ? 'text-orange-500' : 'text-white/50'}`}
       >
         <List className="h-4 w-4" />
       </button>
