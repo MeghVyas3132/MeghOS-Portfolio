@@ -24,7 +24,7 @@ const DEMO_SONGS: Song[] = [
     album: 'Guru (Original Motion Picture Soundtrack)',
     genre: 'Bollywood',
     duration: '5:10',
-    url: '/music/tere-bina.mp3',
+    url: '/music/a-r-rahman-tere-bina-lyrical-song-aishwarya-rai-abhishek-bachchan-guru-gulzar-128-ytshorts.savetube.me.mp3',
   },
   {
     id: 2,
@@ -33,7 +33,7 @@ const DEMO_SONGS: Song[] = [
     album: 'Rang Bhini Radha - Single',
     genre: 'Folk',
     duration: '4:07',
-    url: '/music/rang-bhini-radha.mp3',
+    url: '/music/rang-bhini-radha-folk-box-feat-aditya-gadhavi-kavi-shri-daan-alagari-128-ytshorts.savetube.me.mp3',
   },
   {
     id: 3,
@@ -42,7 +42,7 @@ const DEMO_SONGS: Song[] = [
     album: 'GUILT TRIPPIN - Single',
     genre: 'Hip-Hop/Rap',
     duration: '2:33',
-    url: '/music/guilt-trippin.mp3',
+    url: '/music/central-cee-x-sexyy-red-guilt-trippin-music-video-128-ytshorts.savetube.me.mp3',
   },
   {
     id: 4,
@@ -51,7 +51,7 @@ const DEMO_SONGS: Song[] = [
     album: '2014 Forest Hills Drive',
     genre: 'Hip-Hop/Rap',
     duration: '4:53',
-    url: '/music/no-role-modelz.mp3',
+    url: '/music/j-cole-no-role-modelz-explicit-128-ytshorts.savetube.me.mp3',
   },
   {
     id: 5,
@@ -60,7 +60,7 @@ const DEMO_SONGS: Song[] = [
     album: 'Living in the Shadows - Single',
     genre: 'Singer/Songwriter',
     duration: '3:32',
-    url: '/music/living-in-the-shadows.mp3',
+    url: '/music/matthew-perryman-jones-living-in-the-shadows-official-audio-128-ytshorts.savetube.me.mp3',
   },
 ];
 
