@@ -177,7 +177,7 @@ export const MusicPlayer: React.FC = () => {
         
         {/* Album Art / Cover Image */}
         <div className="relative group mb-6">
-          <div className={`w-40 h-40 sm:w-48 sm:h-48 rounded-2xl overflow-hidden border border-white/20 shadow-2xl transition-transform duration-500 ${isPlaying ? 'scale-105' : ''} bg-gradient-to-br from-orange-500/30 via-orange-500/10 to-transparent flex items-center justify-center`}>
+          <div className={`w-40 h-40 sm:w-48 sm:h-48 rounded-2xl overflow-hidden border border-white/20 shadow-2xl transition-transform duration-500 ${isPlaying ? 'scale-105' : ''}`}>
             <img 
               key={DEMO_SONGS[currentSong].cover}
               src={DEMO_SONGS[currentSong].cover} 
@@ -187,9 +187,10 @@ export const MusicPlayer: React.FC = () => {
                 // Fallback to music icon if cover not found
                 const img = e.currentTarget as HTMLImageElement;
                 img.style.display = 'none';
+                img.nextElementSibling?.classList.remove('hidden');
               }}
             />
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="hidden absolute inset-0 bg-gradient-to-br from-orange-500/30 via-orange-500/10 to-transparent flex items-center justify-center">
               <Music className="w-16 h-16 sm:w-20 sm:h-20 text-orange-500/80" />
             </div>
           </div>
